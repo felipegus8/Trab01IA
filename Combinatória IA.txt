@@ -1,0 +1,12 @@
+Primeira Casa - Peso 150 - 3 de amora - 33.3 seg
+Segunda Casa -Peso 140 - 2 de amora e 1 de marshmallow - 31.81 seg
+Terceira Casa -Peso 130- 3 de marshmallow - 30.95 seg
+Quarta Casa -Peso 120- 1 de marshmallow e 2 de chocolate - 30 seg
+Quinta Casa -Peso 110- 2 de chocolate - 42.30 seg
+Sexta Casa -Peso 100- 1 de chocolate e 1 de brigadeiro - 40 seg
+Sétima Casa -Peso 95- 2 de brigadeiro - 39.58 seg
+Oitava Casa -Peso 90- 2 de brigadeiro - 37.5 seg
+Nona Casa -Peso 85- 2 de coco - 38.63 seg
+Décima Casa -Peso 80- 2 de coco - 36.36 seg
+
+Chega no final com 1 doce de coco.
