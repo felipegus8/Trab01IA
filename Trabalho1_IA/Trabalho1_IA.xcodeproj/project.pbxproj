@@ -111,13 +111,10 @@
 				D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */,
 				D18BFBA41DA0506E009252A9 /* TileModel.swift */,
 				D18BFBA61DA051B8009252A9 /* TileType.swift */,
-<<<<<<< HEAD
 				4E7265371DA0649100BA100D /* LoboModel.swift */,
 				4E7265391DA07B3E00BA100D /* MapaModel.swift */,
-=======
 				D18BFBB21DA08503009252A9 /* RedHoodModel.swift */,
 				D18BFBB41DA0852B009252A9 /* CandyType.swift */,
->>>>>>> 72efc10bd4f326f18505de37a2607e9d56bdeb73
 			);
 			name = Model;
 			sourceTree = "<group>";
