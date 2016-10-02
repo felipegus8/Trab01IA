@@ -8,7 +8,7 @@
 
 import Foundation
 
-let florestaDensaTexture = ""
-let trilhaLimpaTexture = ""
-let trilhaComGalhos = ""
-let loboMauTexture = ""
+let florestaDensaTexture = "trilhaDensa"
+let trilhaLimpaTexture = "trilhaLimpa"
+let trilhaComGalhos = "trilhaGalho"
+let loboMauTexture = "loboMau"

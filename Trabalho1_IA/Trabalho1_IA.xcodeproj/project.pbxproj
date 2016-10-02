@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4E7265381DA0649100BA100D /* LoboModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7265371DA0649100BA100D /* LoboModel.swift */; };
 		4E72653A1DA07B3E00BA100D /* MapaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E7265391DA07B3E00BA100D /* MapaModel.swift */; };
+		4EC25A311DA18DEF0025901F /* RedHoodNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC25A301DA18DEF0025901F /* RedHoodNode.swift */; };
+		4EC25A331DA191BD0025901F /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC25A321DA191BD0025901F /* Direction.swift */; };
 		D17B917D1D99C376000510CC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17B917C1D99C376000510CC /* AppDelegate.swift */; };
 		D17B91831D99C376000510CC /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17B91821D99C376000510CC /* GameScene.swift */; };
 		D17B91851D99C376000510CC /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D17B91841D99C376000510CC /* GameViewController.swift */; };
@@ -29,6 +31,8 @@
 /* Begin PBXFileReference section */
 		4E7265371DA0649100BA100D /* LoboModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoboModel.swift; sourceTree = "<group>"; };
 		4E7265391DA07B3E00BA100D /* MapaModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapaModel.swift; sourceTree = "<group>"; };
+		4EC25A301DA18DEF0025901F /* RedHoodNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedHoodNode.swift; sourceTree = "<group>"; };
+		4EC25A321DA191BD0025901F /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		D17B91791D99C376000510CC /* Trabalho1_IA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trabalho1_IA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D17B917C1D99C376000510CC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D17B91821D99C376000510CC /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 			children = (
 				D17B91821D99C376000510CC /* GameScene.swift */,
 				D18BFBB81DA08923009252A9 /* TileNode.swift */,
+				4EC25A301DA18DEF0025901F /* RedHoodNode.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -122,6 +127,7 @@
 		D17B919B1D99D0DE000510CC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4EC25A321DA191BD0025901F /* Direction.swift */,
 				D17B919C1D99D3DB000510CC /* FileReader.swift */,
 				D18BFBB61DA08711009252A9 /* Textures.swift */,
 				D17B917C1D99C376000510CC /* AppDelegate.swift */,
@@ -214,9 +220,11 @@
 				4E72653A1DA07B3E00BA100D /* MapaModel.swift in Sources */,
 				D17B91831D99C376000510CC /* GameScene.swift in Sources */,
 				D17B919D1D99D3DB000510CC /* FileReader.swift in Sources */,
+				4EC25A331DA191BD0025901F /* Direction.swift in Sources */,
 				D18BFBB31DA08503009252A9 /* RedHoodModel.swift in Sources */,
 				D17B91851D99C376000510CC /* GameViewController.swift in Sources */,
 				D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */,
+				4EC25A311DA18DEF0025901F /* RedHoodNode.swift in Sources */,
 				D17B917D1D99C376000510CC /* AppDelegate.swift in Sources */,
 				D18BFBA51DA0506E009252A9 /* TileModel.swift in Sources */,
 			);
