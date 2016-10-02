@@ -12,4 +12,5 @@ enum TileType: Int {
     case FlorestaDensa = 200
     case TrilhaLimpa = 1
     case TrilhaGalhos = 5
+    case LoboMau = 0
 }

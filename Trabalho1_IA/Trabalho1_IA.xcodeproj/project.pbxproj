@@ -26,6 +26,7 @@
 		D18BFBB51DA0852B009252A9 /* CandyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB41DA0852B009252A9 /* CandyType.swift */; };
 		D18BFBB71DA08711009252A9 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB61DA08711009252A9 /* Textures.swift */; };
 		D18BFBB91DA08923009252A9 /* TileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB81DA08923009252A9 /* TileNode.swift */; };
+		D18BFBBB1DA1898E009252A9 /* MapaNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBBA1DA1898E009252A9 /* MapaNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		D18BFBB41DA0852B009252A9 /* CandyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CandyType.swift; sourceTree = "<group>"; };
 		D18BFBB61DA08711009252A9 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
 		D18BFBB81DA08923009252A9 /* TileNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileNode.swift; sourceTree = "<group>"; };
+		D18BFBBA1DA1898E009252A9 /* MapaNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapaNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				D17B91821D99C376000510CC /* GameScene.swift */,
 				D18BFBB81DA08923009252A9 /* TileNode.swift */,
 				4EC25A301DA18DEF0025901F /* RedHoodNode.swift */,
+				D18BFBBA1DA1898E009252A9 /* MapaNode.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */,
 				4EC25A311DA18DEF0025901F /* RedHoodNode.swift in Sources */,
 				D17B917D1D99C376000510CC /* AppDelegate.swift in Sources */,
+				D18BFBBB1DA1898E009252A9 /* MapaNode.swift in Sources */,
 				D18BFBA51DA0506E009252A9 /* TileModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
