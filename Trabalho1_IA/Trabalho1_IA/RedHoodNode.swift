@@ -37,6 +37,9 @@ class RedHoodNode: SKSpriteNode {
             
         case .Right:
             self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoDireita"))
+        
+        case .None:
+            break
             
         }
     }
