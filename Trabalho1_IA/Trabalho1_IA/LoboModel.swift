@@ -11,12 +11,14 @@ import Foundation
 class LoboModel {
     private var coordX: Int!
     private var coordY: Int!
-    private var dificulty: Int!
+    private var dificulty: Double!
+    private var id: Int!
     
-    init(x: Int, y: Int, dificulty: Int) {
+    init(id: Int, x: Int, y: Int, dificulty: Double) {
         self.coordX = x
         self.coordY = y
         self.dificulty = dificulty
+        self.id = id
     }
     
     func getCoordX() -> Int {
@@ -27,7 +29,11 @@ class LoboModel {
         return self.coordY
     }
     
-    func getDificulty() -> Int {
+    func getDificulty() -> Double {
         return self.dificulty
+    }
+    
+    func getID() -> Int {
+        return id
     }
 }

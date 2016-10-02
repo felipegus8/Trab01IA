@@ -21,18 +21,18 @@ class RedHoodModel {
         }
     }
     
-    func feedWolf(candyType: CandyType) {
+    func feedWolf(candyType: CandyType, n: Int) {
         switch candyType {
         case .TortaDeAmoras:
-            candies[0] -= 1
+            candies[0] -= n
         case .CupcakesDeMarshmallow:
-            candies[1] -= 1
+            candies[1] -= n
         case .BoloDeChocolate:
-            candies[2] -= 1
+            candies[2] -= n
         case .Brigadeiro:
-            candies[3] -= 1
+            candies[3] -= n
         case .DoceDeCoco:
-            candies[4] -= 1
+            candies[4] -= n
         }
     }
     
