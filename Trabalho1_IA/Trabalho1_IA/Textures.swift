@@ -10,5 +10,5 @@ import Foundation
 
 let florestaDensaTexture = "trilhaDensa"
 let trilhaLimpaTexture = "trilhaLimpa"
-let trilhaComGalhos = "trilhaGalho"
+let trilhaComGalhosTexture = "trilhaGalho"
 let loboMauTexture = "loboMau"
