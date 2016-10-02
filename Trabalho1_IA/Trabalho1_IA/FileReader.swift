@@ -49,7 +49,7 @@ class FileReader {
         var y: Int = 0
         var x: Int = 0
         
-        let dificuldades: [Int] = [150, 140, 130, 120, 110, 100, 95, 90, 85, 80]
+        let dificuldades: [Double] = [150, 140, 130, 120, 110, 100, 95, 90, 85, 80]
         var baseLidas: Int = 0
         var arrayLobo: [LoboModel] = []
         

@@ -28,6 +28,7 @@
 		D18BFBB71DA08711009252A9 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB61DA08711009252A9 /* Textures.swift */; };
 		D18BFBB91DA08923009252A9 /* TileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB81DA08923009252A9 /* TileNode.swift */; };
 		D18BFBBB1DA1898E009252A9 /* MapaNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBBA1DA1898E009252A9 /* MapaNode.swift */; };
+		D18BFBBD1DA1AAEB009252A9 /* CandyDistributor .swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBBC1DA1AAEB009252A9 /* CandyDistributor .swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		D18BFBB61DA08711009252A9 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
 		D18BFBB81DA08923009252A9 /* TileNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileNode.swift; sourceTree = "<group>"; };
 		D18BFBBA1DA1898E009252A9 /* MapaNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapaNode.swift; sourceTree = "<group>"; };
+		D18BFBBC1DA1AAEB009252A9 /* CandyDistributor .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CandyDistributor .swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				4E7265391DA07B3E00BA100D /* MapaModel.swift */,
 				D18BFBB21DA08503009252A9 /* RedHoodModel.swift */,
 				D18BFBB41DA0852B009252A9 /* CandyType.swift */,
+				D18BFBBC1DA1AAEB009252A9 /* CandyDistributor .swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				D18BFBB91DA08923009252A9 /* TileNode.swift in Sources */,
 				D18BFBA31DA0503E009252A9 /* AStarPathFinder.swift in Sources */,
 				4E7265381DA0649100BA100D /* LoboModel.swift in Sources */,
+				D18BFBBD1DA1AAEB009252A9 /* CandyDistributor .swift in Sources */,
 				4E72653A1DA07B3E00BA100D /* MapaModel.swift in Sources */,
 				D17B91831D99C376000510CC /* GameScene.swift in Sources */,
 				D17B919D1D99D3DB000510CC /* FileReader.swift in Sources */,
