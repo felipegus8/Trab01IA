@@ -10,11 +10,11 @@ import Foundation
 
 class RedHoodModel {
     
-    private var position: (Int, Int)!
+//    private var position: (Int, Int)!
     private var candies: [Int]!
     
-    init(originX: Int, originY: Int) {
-        position = (originX, originY)
+    init() {
+//        position = (originX, originY)
         candies = [Int]()
         for _ in 0...4 {
             candies.append(5)
@@ -36,13 +36,13 @@ class RedHoodModel {
         }
     }
     
-    func setPosition(x: Int,y: Int) {
-        position = (x,y)
-    }
-    
-    func getPosition() -> (Int, Int) {
-        return position
-    }
+//    func setPosition(x: Int,y: Int) {
+//        position = (x,y)
+//    }
+//    
+//    func getPosition() -> (Int, Int) {
+//        return position
+//    }
     
     func getCandies() -> [Int] {
         return candies

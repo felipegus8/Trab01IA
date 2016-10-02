@@ -44,7 +44,7 @@ private func ==(lhs: ShortestPathStep, rhs: ShortestPathStep) -> Bool {
 }
 
 protocol AStarPathfinderDataSource : NSObjectProtocol {
-    func getWalkableAdjacentsTileModels(TileModel: TileModel) -> [TileModel]
+    func getWalkableAdjacentsTileModels(tileModel: TileModel) -> [TileModel]
     
     func getTileModelCost(fromTileModel: TileModel, toAdjacentTileModel toTileModel: TileModel) -> Int
 }
@@ -101,7 +101,7 @@ class AStarPathfinder {
             }
             
             // 5 Pega os tiles adjacentes ao passo atual
-            let adjacentTileModels = dataSource.getWalkableAdjacentsTileModels(TileModel: currentStep.position)
+            let adjacentTileModels = dataSource.getWalkableAdjacentsTileModels(tileModel: currentStep.position)
             
             //Verifica todos os tiles adjacents
             for TileModel in adjacentTileModels {

@@ -57,6 +57,10 @@ class MapaNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func getTileSize() -> CGSize {
+        return (self.children.last as! SKSpriteNode).size
+    }
+    
     func model() -> MapaModel {
         return self.mapa
     }
@@ -165,6 +169,14 @@ class MapaNode: SKSpriteNode {
         }
         
         return tiles
+    }
+    
+    func getInitialPoint() -> CGPoint {
+        return self.initialNode.position
+    }
+    
+    func getFinalPoint() -> CGPoint {
+        return self.finalNode.position
     }
 
 }

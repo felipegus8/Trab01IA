@@ -15,7 +15,7 @@ class MapaModel {
     private var initialTile: TileModel!
     private var finalTile: TileModel!
     
-    init(costs: [[Int]], initialTile: [Int], finalTile: [Int]) {
+    init(costs: [[Int]], initialTile: (Int, Int), finalTile: (Int, Int)) {
         self.lines = costs.count
         self.columns = costs[0].count
         
@@ -26,10 +26,11 @@ class MapaModel {
                 let tile = TileModel(row: i, col: j, TileModelType: TileType(rawValue: costs[i][j])!)
                 values.append(tile)
                 
-                if i == initialTile[0] && j == initialTile[1] {
+                if i == initialTile.0 && j == initialTile.1 {
+                    print("InitialTile")
                     self.initialTile = tile
                     
-                } else if i == finalTile[0] && j == finalTile[1] {
+                } else if i == finalTile.0 && j == finalTile.1 {
                     self.finalTile = tile
                     
                 }   
