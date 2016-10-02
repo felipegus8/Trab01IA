@@ -10,7 +10,7 @@ import Foundation
 
 class FileReader {
     
-    func readFile() -> ([[Int?]],(Int,Int),(Int,Int))? {
+    func readFile() -> ([[Int?]],(Int,Int),(Int,Int), [LoboModel])? {
         
         let path = "Mapa"
         var levelMatrix:Array<String>
@@ -41,15 +41,20 @@ class FileReader {
         return nil
     }
     
-    func matrixGen(data: Array<String>) -> ([[Int?]],(Int,Int),(Int,Int)) {
+    private func matrixGen(data: Array<String>) -> ([[Int?]],(Int,Int),(Int,Int), [LoboModel]) {
         var array: [Int?] = []
-        var origem, fim: (Int, Int)
-        origem = (0,0)
-        fim = (0,0)
+        var origem: (Int, Int) = (0, 0)
+        var fim: (Int, Int) = (0, 0)
         var matrix: [[Int?]] = []
-        var column = 0
+        var y: Int = 0
+        
+        let dificuldades: [Int] = [150, 140, 130, 120, 110, 100, 95, 90, 85, 80]
+        var baseLidas: Int = 0
+        var arrayLobo: [LoboModel] = []
+        
         for valor in data {
             for char in valor.characters {
+                let x = data.index(of: valor)!
                 
                 switch char {
                 case "D":
@@ -60,30 +65,34 @@ class FileReader {
                     array.append(1)
                 case "G":
                     // trilha com galhos
-                    array.append(200)
+                    array.append(5)
                 case "F":
-                    fim = (data.index(of: valor)!, column)
+                    fim = (x, y)
                     array.append(1)
                 case "I":
-                    origem = (data.index(of: valor)!, column)
+                    origem = (x, y)
                     array.append(1)
-//                case "C":
-//                  TO-DO
-//                    
+                case "C":
+                    let lobo = LoboModel(x: x, y: y, dificulty: dificuldades[baseLidas])
+                    baseLidas += 1
+                    arrayLobo.append(lobo)
+                    array.append(1)
+                    
                 default:
                     print("*** Caracter invalido: \(char) ***")
                     break
                 }
                 
-                column += 1
+                y += 1
             }
+            
             if !array.isEmpty {
                 matrix.append(array)
                 array.removeAll()
             }
         }
         
-        return (matrix,origem,fim)
+        return (matrix, origem, fim, arrayLobo)
     }
     
 }
