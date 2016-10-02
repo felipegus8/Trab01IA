@@ -20,6 +20,10 @@
 		D18BFBA31DA0503E009252A9 /* AStarPathFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */; };
 		D18BFBA51DA0506E009252A9 /* TileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA41DA0506E009252A9 /* TileModel.swift */; };
 		D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA61DA051B8009252A9 /* TileType.swift */; };
+		D18BFBB31DA08503009252A9 /* RedHoodModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB21DA08503009252A9 /* RedHoodModel.swift */; };
+		D18BFBB51DA0852B009252A9 /* CandyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB41DA0852B009252A9 /* CandyType.swift */; };
+		D18BFBB71DA08711009252A9 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB61DA08711009252A9 /* Textures.swift */; };
+		D18BFBB91DA08923009252A9 /* TileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB81DA08923009252A9 /* TileNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AStarPathFinder.swift; sourceTree = "<group>"; };
 		D18BFBA41DA0506E009252A9 /* TileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileModel.swift; sourceTree = "<group>"; };
 		D18BFBA61DA051B8009252A9 /* TileType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
+		D18BFBB21DA08503009252A9 /* RedHoodModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedHoodModel.swift; sourceTree = "<group>"; };
+		D18BFBB41DA0852B009252A9 /* CandyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CandyType.swift; sourceTree = "<group>"; };
+		D18BFBB61DA08711009252A9 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
+		D18BFBB81DA08923009252A9 /* TileNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				D17B91821D99C376000510CC /* GameScene.swift */,
+				D18BFBB81DA08923009252A9 /* TileNode.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -102,8 +111,13 @@
 				D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */,
 				D18BFBA41DA0506E009252A9 /* TileModel.swift */,
 				D18BFBA61DA051B8009252A9 /* TileType.swift */,
+<<<<<<< HEAD
 				4E7265371DA0649100BA100D /* LoboModel.swift */,
 				4E7265391DA07B3E00BA100D /* MapaModel.swift */,
+=======
+				D18BFBB21DA08503009252A9 /* RedHoodModel.swift */,
+				D18BFBB41DA0852B009252A9 /* CandyType.swift */,
+>>>>>>> 72efc10bd4f326f18505de37a2607e9d56bdeb73
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -112,8 +126,9 @@
 			isa = PBXGroup;
 			children = (
 				D17B919C1D99D3DB000510CC /* FileReader.swift */,
-				D17B91891D99C376000510CC /* Assets.xcassets */,
+				D18BFBB61DA08711009252A9 /* Textures.swift */,
 				D17B917C1D99C376000510CC /* AppDelegate.swift */,
+				D17B91891D99C376000510CC /* Assets.xcassets */,
 				D17B918E1D99C376000510CC /* Info.plist */,
 				D17B919E1D99D663000510CC /* Mapa.txt */,
 			);
@@ -194,11 +209,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18BFBB51DA0852B009252A9 /* CandyType.swift in Sources */,
+				D18BFBB71DA08711009252A9 /* Textures.swift in Sources */,
+				D18BFBB91DA08923009252A9 /* TileNode.swift in Sources */,
 				D18BFBA31DA0503E009252A9 /* AStarPathFinder.swift in Sources */,
 				4E7265381DA0649100BA100D /* LoboModel.swift in Sources */,
 				4E72653A1DA07B3E00BA100D /* MapaModel.swift in Sources */,
 				D17B91831D99C376000510CC /* GameScene.swift in Sources */,
 				D17B919D1D99D3DB000510CC /* FileReader.swift in Sources */,
+				D18BFBB31DA08503009252A9 /* RedHoodModel.swift in Sources */,
 				D17B91851D99C376000510CC /* GameViewController.swift in Sources */,
 				D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */,
 				D17B917D1D99C376000510CC /* AppDelegate.swift in Sources */,

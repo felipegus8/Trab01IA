@@ -65,6 +65,16 @@ class AStarPathfinder {
     func hScoreFromCoord(fromCoord: TileModel, toCoord: TileModel) -> Int {
         return abs(toCoord.col - fromCoord.col) + abs(toCoord.row - fromCoord.row)
     }
+    // Converte o caminho mais curto para a notação do TileModel
+    private func convertStepsToShortestPath(lastStep: ShortestPathStep) -> [TileModel] {
+        var shortestPath = [TileModel]()
+        var currentStep = lastStep
+        while let parent = currentStep.parent { // if parent is nil, then it is our starting step, so don't include it
+            shortestPath.insert(currentStep.position, at: 0)
+            currentStep = parent
+        }
+        return shortestPath
+    }
     
     func shortestPathFromTileModel(fromTileModel: TileModel, toTileModel: TileModel) -> [TileModel]? {
         
@@ -87,19 +97,17 @@ class AStarPathfinder {
             
             // 4 Se o passo atual é o destino. Retorna, chegou ao destino.
             if currentStep.position == toTileModel {
-                
-                return convertStepsToShortestPath(currentStep)
-                
-                
+                return convertStepsToShortestPath(lastStep: currentStep)
             }
             
-            // 5
+            // 5 Pega os tiles adjacentes ao passo atual
             let adjacentTileModels = dataSource.getWalkableAdjacentsTileModels(TileModel: currentStep.position)
             
             //Verifica todos os tiles adjacents
             for TileModel in adjacentTileModels {
                 
-                // 6 : Cria um modelo de tile voltado para a aplicacao do A*
+                // 6 Pega o passo e checa se ele já está na lista dos passos fechados.
+                //   Se não, calcula o custo de movimento
                 let step = ShortestPathStep(position: TileModel)
                 
                 if closedSteps.contains(step) {
@@ -108,9 +116,10 @@ class AStarPathfinder {
                 let moveCost = dataSource.getTileModelCost(fromTileModel: currentStep.position, toAdjacentTileModel: step.position)
                 
                 if let existingIndex = openSteps.index(of: step) {
-                    // 7
+                    // 7 Se esse passo já está na lista aberta pegue-o
                     let step = openSteps[existingIndex]
-                    
+                    // se o passo atual for melhor que o pai do passo aberto
+                    // substitua-o como pai do passo aberto
                     if currentStep.gScore + moveCost < step.gScore {
                         step.setParent(parent: currentStep, withMoveCost: moveCost)
                         
@@ -120,7 +129,7 @@ class AStarPathfinder {
                     }
                     
                 } else {
-                    // 8
+                    // 8 Se o passo não foi aberto ainda, compute o seu custo e o adicione na lista de abertos
                     step.setParent(parent: currentStep, withMoveCost: moveCost)
                     step.hScore = hScoreFromCoord(fromCoord: step.position, toCoord: toTileModel)
                     
