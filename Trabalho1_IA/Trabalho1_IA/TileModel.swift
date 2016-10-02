@@ -9,26 +9,22 @@
 import Foundation
 
 class TileModel {
+    
     var col: Int
-    
     var row: Int
-    
     var type: TileType
     
-    init(row: Int, col: Int, TileModelType: TileType)
-    {
+    init(row: Int, col: Int, TileModelType: TileType) {
         self.col = col
         self.row = row
         self.type = TileModelType
     }
     
-    func colunNumber() -> Int
-    {
+    func columnNumber() -> Int {
         return self.col
     }
     
-    func rowNumber() -> Int
-    {
+    func rowNumber() -> Int {
         return self.row
     }
 }

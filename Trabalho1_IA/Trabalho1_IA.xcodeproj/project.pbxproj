@@ -18,6 +18,8 @@
 		D18BFBA31DA0503E009252A9 /* AStarPathFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */; };
 		D18BFBA51DA0506E009252A9 /* TileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA41DA0506E009252A9 /* TileModel.swift */; };
 		D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBA61DA051B8009252A9 /* TileType.swift */; };
+		D18BFBB31DA08503009252A9 /* RedHoodModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB21DA08503009252A9 /* RedHoodModel.swift */; };
+		D18BFBB51DA0852B009252A9 /* CandyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18BFBB41DA0852B009252A9 /* CandyType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AStarPathFinder.swift; sourceTree = "<group>"; };
 		D18BFBA41DA0506E009252A9 /* TileModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileModel.swift; sourceTree = "<group>"; };
 		D18BFBA61DA051B8009252A9 /* TileType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
+		D18BFBB21DA08503009252A9 /* RedHoodModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedHoodModel.swift; sourceTree = "<group>"; };
+		D18BFBB41DA0852B009252A9 /* CandyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CandyType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 				D18BFBA21DA0503E009252A9 /* AStarPathFinder.swift */,
 				D18BFBA41DA0506E009252A9 /* TileModel.swift */,
 				D18BFBA61DA051B8009252A9 /* TileType.swift */,
+				D18BFBB21DA08503009252A9 /* RedHoodModel.swift */,
+				D18BFBB41DA0852B009252A9 /* CandyType.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -188,9 +194,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18BFBB51DA0852B009252A9 /* CandyType.swift in Sources */,
 				D18BFBA31DA0503E009252A9 /* AStarPathFinder.swift in Sources */,
 				D17B91831D99C376000510CC /* GameScene.swift in Sources */,
 				D17B919D1D99D3DB000510CC /* FileReader.swift in Sources */,
+				D18BFBB31DA08503009252A9 /* RedHoodModel.swift in Sources */,
 				D17B91851D99C376000510CC /* GameViewController.swift in Sources */,
 				D18BFBA71DA051B8009252A9 /* TileType.swift in Sources */,
 				D17B917D1D99C376000510CC /* AppDelegate.swift in Sources */,
