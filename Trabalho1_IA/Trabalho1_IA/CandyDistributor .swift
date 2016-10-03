@@ -29,14 +29,48 @@ class CandyDistributor {
                                                     [0,0,0,2,0], [0,0,0,2,0],
                                                     [0,0,0,0,2], [0,0,0,0,2]]
     
-    static func wolfCost(id: Int, loboArray: [LoboModel],
-                         feedWolf: (CandyType, Int) -> () ) -> Double {
-        print(id)
+    static func wolfCost(id: Int, loboArray: [LoboModel] ) -> Double {
         var candiesGiven = combinatorial[id]
         var appreciationSum: Double = 0.0
         
         for i in 0...4 {
+            print(candiesGiven[i])
+            switch i {
+            case 0:
+                appreciationSum += candiesGiven[i] * CandyType.TortaDeAmoras.rawValue
+            case 1:
+                appreciationSum += candiesGiven[i] * CandyType.CupcakesDeMarshmallow.rawValue
+            case 2:
+                appreciationSum += candiesGiven[i] * CandyType.BoloDeChocolate.rawValue
+            case 3:
+                appreciationSum += candiesGiven[i] * CandyType.Brigadeiro.rawValue
+            case 4:
+                appreciationSum += candiesGiven[i] * CandyType.DoceDeCoco.rawValue
+            default:
+                print("error")
+                break
+            }
             
+        }
+        
+        for lobo in loboArray {
+            if lobo.getID() == id {
+                let dificuldade = lobo.getDificulty()
+                return dificuldade/appreciationSum
+            }
+        }
+        
+        return -1.0
+        
+    }
+    
+    static func wolfCost(id: Int, loboArray: [LoboModel],
+                         feedWolf: (CandyType, Int) -> () ) -> Double {
+        var candiesGiven = combinatorial[id]
+        var appreciationSum: Double = 0.0
+        
+        for i in 0...4 {
+            print(candiesGiven[i])
             switch i {
             case 0:
                 appreciationSum += candiesGiven[i] * CandyType.TortaDeAmoras.rawValue
@@ -70,4 +104,5 @@ class CandyDistributor {
         return -1.0
         
     }
+
 }

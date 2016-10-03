@@ -27,7 +27,6 @@ class MapaModel {
                 values.append(tile)
                 
                 if i == initialTile.0 && j == initialTile.1 {
-                    print("InitialTile")
                     self.initialTile = tile
                     
                 } else if i == finalTile.0 && j == finalTile.1 {
@@ -43,8 +42,7 @@ class MapaModel {
     func getTileTop(tile: TileModel) -> TileModel? {
         let y = tile.row - 1
         
-        if(y >= 0)
-        {
+        if(y >= 0) {
             return self.matrix[y][tile.col]
         }
         

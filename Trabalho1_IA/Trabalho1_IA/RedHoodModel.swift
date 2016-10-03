@@ -19,6 +19,8 @@ class RedHoodModel {
         for _ in 0...4 {
             candies.append(5)
         }
+        
+        print(candies)
     }
     
     func feedWolf(candyType: CandyType, n: Int) {
@@ -34,6 +36,7 @@ class RedHoodModel {
         case .DoceDeCoco:
             candies[4] -= n
         }
+        print(candies)
     }
     
 //    func setPosition(x: Int,y: Int) {

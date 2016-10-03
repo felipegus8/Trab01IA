@@ -70,10 +70,6 @@ class AStarPathfinder {
         var shortestPath = [TileModel]()
         var currentStep = lastStep
         while let parent = currentStep.parent { // if parent is nil, then it is our starting step, so don't include it
-            print("TileType = \(parent.position.type)")
-            print("x = \(parent.position.row)")
-            print("y = \(parent.position.col)")
-            
             shortestPath.insert(currentStep.position, at: 0)
             currentStep = parent
         }

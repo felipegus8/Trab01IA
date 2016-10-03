@@ -26,7 +26,6 @@ class FileReader {
             
             if let content = (data) {
                 levelMatrix = content.components(separatedBy: NSCharacterSet.newlines)
-                print(levelMatrix)
                 return matrixGen(data: levelMatrix)
             }
             else {
@@ -54,16 +53,12 @@ class FileReader {
         var baseLidas: Int = 0
         var arrayLobo: [LoboModel] = []
         
-        print(data.count)
-        
         for valor in data {
             if valor != "" {
-                print("x: \(x)")
                 y = 0
                 for char in valor.characters {
                     //                let x = valor.index(of: valor)!
                     
-                    print("\(x) \(y)")
                     
                     switch char {
                     case "D":
@@ -98,10 +93,6 @@ class FileReader {
                     
                 }
                 
-                if x == 1{
-                    print("x = 1")
-                }
-                
                 x += 1
                 
                 if !array.isEmpty {
@@ -110,8 +101,6 @@ class FileReader {
                 }
             }
         }
-        
-        print(matrix[0].count)
         
         return (matrix, origem, fim, arrayLobo)
     }

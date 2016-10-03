@@ -40,7 +40,7 @@ class MapaNode: SKSpriteNode {
                 }
                 if tileModel == self.mapa.getFinalTile() {
                     tileNode.texture = SKTexture(imageNamed: "")
-                    self.initialNode = tileNode
+                    self.finalNode = tileNode
                 }
                 
                 let position = CGPoint(x: CGFloat(i)*sizeNode.width, y: CGFloat(j)*sizeNode.width)

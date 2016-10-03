@@ -26,12 +26,11 @@ class GameScene: SKScene {
     let (matrix, initial, final, clareiras) = FileReader.readFile()!
     
     override func didMove(to view: SKView) {
-        self.backgroundColor = UIColor.red
-        print("teste")
+        self.backgroundColor = UIColor.clear
         self.screenSize = UIScreen.main.bounds
         self.world.size = CGSize(width: screenSize.width - 200, height: screenSize.width - 200)
         
-        self.mapModel = MapaModel(costs: matrix!, initialTile: initial, finalTile: final)
+        self.mapModel = MapaModel(costs: matrix!, initialTile: (36, 4), finalTile: final)
         
         self.mapNode = MapaNode(size: self.world.size, mapaModel: self.mapModel)
         self.mapNode.anchorPoint = CGPoint.zero
@@ -60,13 +59,7 @@ class GameScene: SKScene {
         
         self.pathTiles = self.pathFinder.shortestPathFromTileModel(fromTileModel: self.mapModel.getInitialTile(), toTileModel: self.mapModel.getFinalTile())
         self.pathNodes = self.mapNode.modelArrayToNodeArray(models: self.pathTiles)
-        
-        print(pathNodes.count)
-        
-        
-        
-        
-        
+    
         self.movement()
         
     }
@@ -92,33 +85,69 @@ class GameScene: SKScene {
         self.world.position = CGPoint(x: -(self.redHoodNode.position.x-(self.size.width/2)), y: -(self.redHoodNode.position.y-(self.size.height/2)))
     }
     
-    func moveDirection(completion: (() ->())?, direction: Direction) {
+    func moveUp(completion: (() ->())?) {
+        if let node = self.mapNode.getNodeOnTop(tile: self.currentNode) {
+            let point = self.mapNode.getTilePosition(tile: node)
+            
+            let moving = SKAction.move(to: point, duration: moveDuration)
+            self.redHoodNode.rotate(direction: .Up)
+            
+            let paintedNode = self.mapNode.getNodeOnTop(tile: self.currentNode)
+            paintedNode?.paintNode(node: paintedNode!)
+            
+            self.redHoodNode.run(moving, completion: {
+                self.currentNode = node
+                
+                completion?()
+            })
+        }
+    }
+    
+    func moveDown(completion: (() ->())?) {
         if let node = self.mapNode.getNodeOnBottom(tile: self.currentNode) {
             let point = self.mapNode.getTilePosition(tile: node)
             
             let moving = SKAction.move(to: point, duration: moveDuration)
-            self.redHoodNode.rotate(direction: direction)
+            self.redHoodNode.rotate(direction: .Down)
             
-            switch direction {
-            case .Down:
-                let paintedNode = self.mapNode.getNodeOnBottom(tile: self.currentNode)
-                paintedNode?.paintNode(node: paintedNode!)
+            let paintedNode = self.mapNode.getNodeOnBottom(tile: self.currentNode)
+            paintedNode?.paintNode(node: paintedNode!)
+            
+            self.redHoodNode.run(moving, completion: {
+                self.currentNode = node
                 
-            case .Up:
-                let paintedNode = self.mapNode.getNodeOnTop(tile: self.currentNode)
-                paintedNode?.paintNode(node: paintedNode!)
+                completion?()
+            })
+        }
+    }
+    
+    func moveLeft(completion: (() ->())?) {
+        if let node = self.mapNode.getNodeOnLeft(tile: self.currentNode) {
+            let point = self.mapNode.getTilePosition(tile: node)
+            
+            let moving = SKAction.move(to: point, duration: moveDuration)
+            self.redHoodNode.rotate(direction: .Left)
+            
+            let paintedNode = self.mapNode.getNodeOnLeft(tile: self.currentNode)
+            paintedNode?.paintNode(node: paintedNode!)
+            
+            self.redHoodNode.run(moving, completion: {
+                self.currentNode = node
                 
-            case .Left:
-                let paintedNode = self.mapNode.getNodeOnLeft(tile: self.currentNode)
-                paintedNode?.paintNode(node: paintedNode!)
-                
-            case .Right:
-                let paintedNode = self.mapNode.getNodeOnRight(tile: self.currentNode)
-                paintedNode?.paintNode(node: paintedNode!)
-                
-            case .None:
-                break
-            }
+                completion?()
+            })
+        }
+    }
+    
+    func moveRight(completion: (() ->())?) {
+        if let node = self.mapNode.getNodeOnRight(tile: self.currentNode) {
+            let point = self.mapNode.getTilePosition(tile: node)
+            
+            let moving = SKAction.move(to: point, duration: moveDuration)
+            self.redHoodNode.rotate(direction: .Right)
+            
+            let paintedNode = self.mapNode.getNodeOnRight(tile: self.currentNode)
+            paintedNode?.paintNode(node: paintedNode!)
             
             self.redHoodNode.run(moving, completion: {
                 self.currentNode = node
@@ -130,30 +159,36 @@ class GameScene: SKScene {
     
     func movement() {
         if self.pathNodes.count > 0 {
-            print("pathNodes \(self.pathNodes.count)")
             let node = self.pathNodes.removeFirst()
-//            print(node.model().row)
-//            print(node.model().col)
-            
             let direction = self.mapNode.getAdjacentNodeDirection(currentTile: self.currentNode, toTile: node)
             
-            print(direction)
-            
-            if let clareira = self.getEnemyBaseOnTile(x: node.model().row, y: node.model().col) {
+            if let clareira = self.getWolfOnTile(x: node.model().row, y: node.model().col) {
                 //TO DO
-//                self.totalCost +=
+                self.totalCost += CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras, feedWolf: self.redHoodModel.feedWolf)
             } else {
                 self.totalCost += Double(node.model().type.rawValue)
             }
-            print("move")
-            if direction != .None {
-                print("moveif")
-                moveDirection(completion: self.movement, direction: direction)
+            
+            switch direction {
+            case .Up:
+                self.moveUp(completion: self.movement)
+                
+            case .Down:
+                self.moveDown(completion: self.movement)
+                
+            case .Left:
+                self.moveLeft(completion: self.movement)
+                
+            case .Right:
+                self.moveRight(completion: self.movement)
+                
+            case .None:
+                break;
             }
         }
     }
     
-    func getEnemyBaseOnTile(x : Int, y: Int) -> LoboModel? {
+    func getWolfOnTile(x : Int, y: Int) -> LoboModel? {
         for c in self.clareiras {
             if c.getCoordX() == x && c.getCoordY() == y {
                 return c
@@ -174,8 +209,7 @@ extension GameScene: AStarPathfinderDataSource {
             if clareira.getCoordX() == toTileModel.row && clareira.getCoordY() == toTileModel.col {
                 //TO DO
                 
-                var ret = Int(CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras, feedWolf: self.redHoodModel.feedWolf))
-                print("custo \(ret)")
+                let ret = Int(CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras))
                 
                 return ret
             }
