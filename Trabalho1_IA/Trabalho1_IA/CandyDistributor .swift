@@ -23,7 +23,7 @@ class CandyDistributor {
 //    Chega no final com 1 doce de coco.
 
     
-    static private let combinatorial: [[Double]] = [[3,0,0,0,0], [2,1,0,0,0],
+    static public let combinatorial: [[Double]] = [[3,0,0,0,0], [2,1,0,0,0],
                                                     [0,3,0,0,0], [0,1,2,0,0],
                                                     [0,0,2,0,0], [0,0,1,1,0],
                                                     [0,0,0,2,0], [0,0,0,2,0],
@@ -32,9 +32,11 @@ class CandyDistributor {
     static func wolfCost(id: Int, loboArray: [LoboModel] ) -> Double {
         var candiesGiven = combinatorial[id]
         var appreciationSum: Double = 0.0
-        
+        print("Vetor")
+        print(id)
         for i in 0...4 {
             print(candiesGiven[i])
+            
             switch i {
             case 0:
                 appreciationSum += candiesGiven[i] * CandyType.TortaDeAmoras.rawValue
@@ -70,7 +72,9 @@ class CandyDistributor {
         var appreciationSum: Double = 0.0
         
         for i in 0...4 {
+            print(id)
             print(candiesGiven[i])
+            print("Vetor")
             switch i {
             case 0:
                 appreciationSum += candiesGiven[i] * CandyType.TortaDeAmoras.rawValue

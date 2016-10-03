@@ -101,7 +101,10 @@ class FileReader {
                 }
             }
         }
-        
+        for lobo in arrayLobo
+        {
+            print(lobo.getID())
+        }
         return (matrix, origem, fim, arrayLobo)
     }
     

@@ -7,7 +7,7 @@
 //
 
 import SpriteKit
-
+  var i = 0
 class GameScene: SKScene {
     var mapNode: MapaNode!
     private var mapModel: MapaModel!
@@ -61,8 +61,8 @@ class GameScene: SKScene {
         var candies = redHoodModel.getCandies()
         
         self.candiesLabel = SKLabelNode(text: "Doce 1: \(candies[0]), Doce 2: \(candies[1]), Doce 3: \(candies[2]), Doce 4: \(candies[3]), Doce 5: \(candies[4])")
-        self.candiesLabel.position = CGPoint(x: 50, y: 10)
-        self.candiesLabel.fontSize = 15
+        self.candiesLabel.position = CGPoint(x: 5, y: 10)
+        self.candiesLabel.fontSize = 12
         self.candiesLabel.fontName = "Helvetica-Bold"
         self.candiesLabel.fontColor = UIColor.white
         self.candiesLabel.horizontalAlignmentMode = .left
@@ -101,7 +101,7 @@ class GameScene: SKScene {
         costLabel.text = "Cost: \(totalCost.rounded())"
         
         var candies = redHoodModel.getCandies()
-        self.candiesLabel.text =  "Doce 1: \(candies[0]), Doce 2: \(candies[1]), Doce 3: \(candies[2]), Doce 4: \(candies[3]), Doce 5: \(candies[4])"
+        self.candiesLabel.text =  "Torta de Amora: \(candies[0]), Cupcake de Marshmallow: \(candies[1]), Bolo de chocolate: \(candies[2]), Brigadeiro: \(candies[3]), Doce de Coco: \(candies[4])"
         
         
     }
@@ -186,10 +186,14 @@ class GameScene: SKScene {
         if self.pathNodes.count > 0 {
             let node = self.pathNodes.removeFirst()
             let direction = self.mapNode.getAdjacentNodeDirection(currentTile: self.currentNode, toTile: node)
-            
+          if i > 9
+            {
+                i = 0
+            }
             if let clareira = self.getWolfOnTile(x: node.model().row, y: node.model().col) {
                 //TO DO
-                self.totalCost += CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras, feedWolf: self.redHoodModel.feedWolf)
+                self.totalCost += CandyDistributor.wolfCost(id: i, loboArray: clareiras, feedWolf: self.redHoodModel.feedWolf)
+                i+=1
             } else {
                 self.totalCost += Double(node.model().type.rawValue)
             }
@@ -231,13 +235,14 @@ extension GameScene: AStarPathfinderDataSource {
     
     func getTileModelCost(fromTileModel: TileModel, toAdjacentTileModel toTileModel: TileModel) -> Int {
         for clareira in self.clareiras {
-            if clareira.getCoordX() == toTileModel.row && clareira.getCoordY() == toTileModel.col {
+           if clareira.getCoordX() == toTileModel.row && clareira.getCoordY() == toTileModel.col {
                 //TO DO
                 
                 let ret = Int(CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras))
-                
+    
                 return ret
-            }
+           }
+            
         }
         
         return toTileModel.type.rawValue
