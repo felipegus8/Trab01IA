@@ -29,8 +29,8 @@ class MapaNode: SKSpriteNode {
             var rowNode = [TileNode]()
             for j in 0...columns-1 {
                 let tileModel = self.mapa.getTilePosition(row: i, col: j)
-                let sizeNode = CGSize(width: size.width/CGFloat(columns),
-                                      height: size.height/CGFloat(rows))
+                let sizeNode = CGSize(width: size.width * 2/CGFloat(columns),
+                                      height: size.height * 2/CGFloat(rows))
                 let tileNode = TileNode(size: sizeNode, tileModel: tileModel)
                 tileNode.anchorPoint = CGPoint.zero
                 
@@ -39,7 +39,7 @@ class MapaNode: SKSpriteNode {
                     self.initialNode = tileNode
                 }
                 if tileModel == self.mapa.getFinalTile() {
-                    tileNode.texture = SKTexture(imageNamed: trilhaLimpaTexture)
+                    tileNode.texture = SKTexture(imageNamed: "")
                     self.initialNode = tileNode
                 }
                 

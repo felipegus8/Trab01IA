@@ -43,41 +43,45 @@ class MapaModel {
     func getTileTop(tile: TileModel) -> TileModel? {
         let y = tile.row - 1
         
-        if y <= 0 {
-            return nil
+        if(y >= 0)
+        {
+            return self.matrix[y][tile.col]
         }
         
-        return self.matrix[y][tile.col]
+        return nil
     }
     
     func getTileBottom(tile: TileModel) -> TileModel? {
         let y = tile.row + 1
         
-        if y > self.lines {
-            return nil
+        if(y < self.lines)
+        {
+            return self.matrix[y][tile.col]
         }
         
-        return self.matrix[y][tile.col]
+        return nil
     }
     
     func getTileRight(tile: TileModel) -> TileModel? {
         let x = tile.col + 1
         
-        if x > self.columns {
-            return nil
+        if(x < self.columns)
+        {
+            return self.matrix[tile.row][x]
         }
         
-        return self.matrix[tile.row][x]
+        return nil
     }
     
     func getTileLeft(tile: TileModel) -> TileModel? {
         let x = tile.col - 1
         
-        if x <= 0 {
-            return nil
+        if(x >= 0)
+        {
+            return self.matrix[tile.row][x]
         }
         
-        return self.matrix[tile.row][x]
+        return nil
     }
     
     func getAdjacents(tile: TileModel) -> [TileModel] {

@@ -46,6 +46,7 @@ class FileReader {
         var origem: (Int, Int) = (0, 0)
         var fim: (Int, Int) = (0, 0)
         var matrix = [[Int]]()
+        let basesOrdem = [9,8,7,5,6,4,3,2,1,0]
         var y: Int = 0
         var x: Int = 0
         
@@ -83,10 +84,10 @@ class FileReader {
                         
                         array.append(1)
                     case "C":
-                        let lobo = LoboModel(x: x, y: y, dificulty: dificuldades[baseLidas])
+                        let lobo = LoboModel(id : basesOrdem[baseLidas], x: x, y: y, dificulty: dificuldades[baseLidas])
                         baseLidas += 1
                         arrayLobo.append(lobo)
-                        array.append(1)
+                        array.append(0)
                         
                     default:
                         print("*** Caracter invalido: \(char) ***")

@@ -13,7 +13,7 @@ class GameScene: SKScene {
     private var mapModel: MapaModel!
 //    private var loboNode: LoboNode!
 //    private var loboModel: LoboModel!
-    private var redHoodModel: RedHoodModel!
+    var redHoodModel: RedHoodModel!
     private var redHoodNode: RedHoodNode!
     private var pathFinder: AStarPathfinder!
     private var currentNode: TileNode!
@@ -46,12 +46,6 @@ class GameScene: SKScene {
             self.mapNode.addChild(clareiraNode)
         }
         
-        self.pathFinder = AStarPathfinder()
-        self.pathFinder.dataSource = self
-        
-        self.pathTiles = self.pathFinder.shortestPathFromTileModel(fromTileModel: self.mapModel.getInitialTile(), toTileModel: self.mapModel.getFinalTile())
-        self.pathNodes = self.mapNode.modelArrayToNodeArray(models: self.pathTiles)
-        
         self.redHoodModel = RedHoodModel()
         self.redHoodNode = RedHoodNode(size: tileSize, redHoodModel: redHoodModel)
         self.redHoodNode.position = self.mapNode.getInitialPoint()
@@ -60,6 +54,18 @@ class GameScene: SKScene {
         
         world.addChild(self.mapNode)
         mapNode.addChild(self.redHoodNode)
+        
+        self.pathFinder = AStarPathfinder()
+        self.pathFinder.dataSource = self
+        
+        self.pathTiles = self.pathFinder.shortestPathFromTileModel(fromTileModel: self.mapModel.getInitialTile(), toTileModel: self.mapModel.getFinalTile())
+        self.pathNodes = self.mapNode.modelArrayToNodeArray(models: self.pathTiles)
+        
+        print(pathNodes.count)
+        
+        
+        
+        
         
         self.movement()
         
@@ -124,9 +130,14 @@ class GameScene: SKScene {
     
     func movement() {
         if self.pathNodes.count > 0 {
+            print("pathNodes \(self.pathNodes.count)")
             let node = self.pathNodes.removeFirst()
+//            print(node.model().row)
+//            print(node.model().col)
             
             let direction = self.mapNode.getAdjacentNodeDirection(currentTile: self.currentNode, toTile: node)
+            
+            print(direction)
             
             if let clareira = self.getEnemyBaseOnTile(x: node.model().row, y: node.model().col) {
                 //TO DO
@@ -134,8 +145,9 @@ class GameScene: SKScene {
             } else {
                 self.totalCost += Double(node.model().type.rawValue)
             }
-            
+            print("move")
             if direction != .None {
+                print("moveif")
                 moveDirection(completion: self.movement, direction: direction)
             }
         }
@@ -158,10 +170,14 @@ extension GameScene: AStarPathfinderDataSource {
     }
     
     func getTileModelCost(fromTileModel: TileModel, toAdjacentTileModel toTileModel: TileModel) -> Int {
-        for base in self.clareiras {
-            if base.getCoordX() == toTileModel.row && base.getCoordY() == toTileModel.col {
+        for clareira in self.clareiras {
+            if clareira.getCoordX() == toTileModel.row && clareira.getCoordY() == toTileModel.col {
                 //TO DO
-                return 0
+                
+                var ret = Int(CandyDistributor.wolfCost(id: clareira.getID(), loboArray: clareiras, feedWolf: self.redHoodModel.feedWolf))
+                print("custo \(ret)")
+                
+                return ret
             }
         }
         

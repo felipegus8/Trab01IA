@@ -31,7 +31,7 @@ class CandyDistributor {
     
     static func wolfCost(id: Int, loboArray: [LoboModel],
                          feedWolf: (CandyType, Int) -> () ) -> Double {
-        
+        print(id)
         var candiesGiven = combinatorial[id]
         var appreciationSum: Double = 0.0
         
