@@ -27,16 +27,16 @@ class RedHoodNode: SKSpriteNode {
     func rotate(direction: Direction) {
         switch direction {
         case .Up:
-            self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoCostas"))
-            
-        case .Down:
-            self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoFrente"))
-            
-        case .Left:
             self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoEsquerda"))
             
-        case .Right:
+        case .Down:
             self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoDireita"))
+            
+        case .Left:
+            self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoFrente"))
+            
+        case .Right:
+            self.texture = SKTexture(image: #imageLiteral(resourceName: "chapeuzinhoCostas"))
         
         case .None:
             break

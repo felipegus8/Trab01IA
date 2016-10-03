@@ -39,7 +39,7 @@ class TileNode: SKSpriteNode {
     }
     
     func paintNode(node: TileNode) {
-        node.color = UIColor.red
+        node.color = UIColor.blue
         node.texture = nil
     }
     

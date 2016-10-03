@@ -39,7 +39,7 @@ class MapaNode: SKSpriteNode {
                     self.initialNode = tileNode
                 }
                 if tileModel == self.mapa.getFinalTile() {
-                    tileNode.texture = SKTexture(imageNamed: "")
+                    tileNode.texture = SKTexture(imageNamed: casaVovoTexture)
                     self.finalNode = tileNode
                 }
                 

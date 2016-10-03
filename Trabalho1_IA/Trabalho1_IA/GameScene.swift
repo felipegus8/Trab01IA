@@ -20,6 +20,8 @@ class GameScene: SKScene {
     private var pathTiles: [TileModel]!
     private var pathNodes: [TileNode]!
     private var world = SKSpriteNode()
+    private var costLabel: SKLabelNode!
+    private var candiesLabel: SKLabelNode!
     private let moveDuration = 0.15
     private var totalCost: Double = 0
     private var screenSize: CGRect!
@@ -36,6 +38,13 @@ class GameScene: SKScene {
         self.mapNode.anchorPoint = CGPoint.zero
         self.currentNode = self.mapNode.getInitialNode()
         
+        self.costLabel = SKLabelNode(text: "Cost: \(totalCost)")
+        self.costLabel.position = CGPoint(x: 650, y: 10)
+        self.costLabel.fontSize = 15
+        self.costLabel.fontName = "Helvetica-Bold"
+        self.costLabel.fontColor = UIColor.white
+        self.costLabel.horizontalAlignmentMode = .left
+        
         let tileSize = self.mapNode.getTileSize()
         
         for c in self.clareiras {
@@ -49,7 +58,18 @@ class GameScene: SKScene {
         self.redHoodNode = RedHoodNode(size: tileSize, redHoodModel: redHoodModel)
         self.redHoodNode.position = self.mapNode.getInitialPoint()
         
+        var candies = redHoodModel.getCandies()
+        
+        self.candiesLabel = SKLabelNode(text: "Doce 1: \(candies[0]), Doce 2: \(candies[1]), Doce 3: \(candies[2]), Doce 4: \(candies[3]), Doce 5: \(candies[4])")
+        self.candiesLabel.position = CGPoint(x: 50, y: 10)
+        self.candiesLabel.fontSize = 15
+        self.candiesLabel.fontName = "Helvetica-Bold"
+        self.candiesLabel.fontColor = UIColor.white
+        self.candiesLabel.horizontalAlignmentMode = .left
+        
         self.addChild(self.world)
+        self.addChild(self.costLabel)
+        self.addChild(self.candiesLabel)
         
         world.addChild(self.mapNode)
         mapNode.addChild(self.redHoodNode)
@@ -78,7 +98,12 @@ class GameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        costLabel.text = "Cost: \(totalCost.rounded())"
+        
+        var candies = redHoodModel.getCandies()
+        self.candiesLabel.text =  "Doce 1: \(candies[0]), Doce 2: \(candies[1]), Doce 3: \(candies[2]), Doce 4: \(candies[3]), Doce 5: \(candies[4])"
+        
+        
     }
     
     override func didSimulatePhysics() {
