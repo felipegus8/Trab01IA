@@ -179,7 +179,7 @@
 				TargetAttributes = {
 					D17B91781D99C375000510CC = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = BUK6UDW987;
+						DevelopmentTeam = XBEPC2JPC9;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -359,7 +359,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = BUK6UDW987;
+				DEVELOPMENT_TEAM = XBEPC2JPC9;
 				INFOPLIST_FILE = Trabalho1_IA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "bepid.Trabalho1-IA";
@@ -372,7 +372,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = BUK6UDW987;
+				DEVELOPMENT_TEAM = XBEPC2JPC9;
 				INFOPLIST_FILE = Trabalho1_IA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "bepid.Trabalho1-IA";
