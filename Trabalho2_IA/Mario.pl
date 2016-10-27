@@ -143,4 +143,40 @@ tile(12,10).
 tile(12,11).
 tile(12,12).
 
+adj(1,2).
+adj(2,1).
+adj(2,3).
+adj(3,2).
+adj(3,4).
+adj(4,3).
+adj(5,4).
+adj(4,5).
+adj(6,5).
+adj(5,6).
+adj(7,6).
+adj(6,7).
+adj(8,7).
+adj(7,8).
+adj(9,8).
+adj(8,9).
+adj(10,9).
+adj(9,10).
+adj(10,11).
+adj(11,10).
+adj(12,11).
+adj(11,12).
 
+adjacent( [X1, Y1], [X2, Y2] ) :-
+( X1 = X2, adj( Y1, Y2 )
+; Y1 = Y2, adj( X1, X2 )
+).
+
+start :-
+init,
+format("Começou o jogo")
+step([[1,1]]).
+
+init :-
+init_game,
+init_mario,
+init_bowser.
