@@ -166,17 +166,197 @@ adj(11,10).
 adj(12,11).
 adj(11,12).
 
+
+position(1,1).
+energy(100).
+goldfound(0).
+
+tamanho_mundo(12).
+
+
 adjacent( [X1, Y1], [X2, Y2] ) :-
 ( X1 = X2, adj( Y1, Y2 )
 ; Y1 = Y2, adj( X1, X2 )
 ).
 
-start :-
-init,
-format("Começou o jogo")
-step([[1,1]]).
+%Percepções
 
-init :-
-init_game,
-init_mario,
-init_bowser.
+%Base de conhecimento
+
+adiciona_inimigo20(no):- position([X,Y]),
+Z1 is Y + 1,assumir_inimigo20(no,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo20(no,[X,Z2]),
+Z3 is X + 1,assumir_inimigo20(no,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo20(no,[Z4,Y]).
+
+assumir_inimigo20(no,L):-retractall(einimigo20(_,L)),assert(einimigo20(no,L)).
+
+adiciona_inimigo20(yes):- position([X,Y]),
+Z1 is Y + 1,assumir_inimigo20(yes,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo20(yes,[X,Z2]),
+Z3 is X + 1,assumir_inimigo20(yes,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo20(yes,[Z4,Y]).
+
+assumir_inimigo20(yes,L):-retractall(einimigo20(_,L)),assert(einimigo20(yes,L)).
+
+adiciona_inimigo50(no):- position([X,Y]),
+Z1 is Y + 1,assumir_inimigo50(no,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo50(no,[X,Z2]),
+Z3 is X + 1,assumir_inimigo50(no,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo50(no,[Z4,Y]).
+
+assumir_inimigo50(no,L):-retractall(einimigo50(_,L)),assert(einimigo50(no,L)).
+
+adiciona_inimigo50(yes):- position([X,Y]),
+Z1 is Y + 1,assumir_inimigo50(yes,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo50(yes,[X,Z2]),
+Z3 is X + 1,assumir_inimigo50(yes,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo50(yes,[Z4,Y]).
+
+assumir_inimigo50(yes,L):-retractall(einimigo50(_,L)),assert(einimigo50(yes,L)).
+
+adiciona_teletransporte(no):- position([X,Y]),
+Z1 is Y + 1,assumir_teletransporte(no,[X,Z1]),
+Z2 is Y - 1,assumir_teletransporte(no,[X,Z2]),
+Z3 is X + 1,assumir_teletransporte(no,[Z3,Y]),
+Z4 is X - 1,assumir_teletransporte(no,[Z4,Y]).
+
+assumir_teletransporte(no,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(no,L)).
+
+adiciona_teletransporte(yes):- position([X,Y]),
+Z1 is Y + 1,assumir_teletransporte(yes,[X,Z1]),
+Z2 is Y - 1,assumir_teletransporte(yes,[X,Z2]),
+Z3 is X + 1,assumir_teletransporte(yes,[Z3,Y]),
+Z4 is X - 1,assumir_teletransporte(yes,[Z4,Y]).
+
+
+assumir_teletransporte(yes,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(yes,L)).
+
+adiciona_poco(no):- position([X,Y]),
+Z1 is Y + 1,assumir_poco(no,[X,Z1]),
+Z2 is Y - 1,assumir_poco(no,[X,Z2]),
+Z3 is X + 1,assumir_poco(no,[Z3,Y]),
+Z4 is X - 1,assumir_poco(no,[Z4,Y]).
+
+assumir_poco(no,L):-retractall(epoco(_,L)),assert(epoco(no,L)).
+
+adiciona_poco(yes):- position([X,Y]),
+Z1 is Y + 1,assumir_poco(yes,[X,Z1]),
+Z2 is Y - 1,assumir_poco(yes,[X,Z2]),
+Z3 is X + 1,assumir_poco(yes,[Z3,Y]),
+Z4 is X - 1,assumir_poco(yes,[Z4,Y]).
+
+assumir_poco(yes,L):-retractall(epoco(_,L)),assert(epoco(yes,L)).
+
+adiciona_ouro(no):- loc_ouro(GL),
+assumir_ouro(no,GL).
+
+assumir_ouro(no,L):-retractall(eouro(_,L)),assert(eouro(no,L)).
+
+adiciona_ouro(yes):- position([X,Y]),
+loc_gold([X1,Y1]),
+X = X1, Y = Y1,
+assumir_ouro(yes,[X1,Y1]).
+
+assumir_ouro(yes,L):-retractall(eouro(_,L)),assert(eouro(yes,L)).
+
+posicoes_permitidas([X,Y]) :-
+    tamanho_mundo(TM),
+    X > 0, X < WS+1,
+    Y > 0 , Y < WS+1.
+	
+	
+pergunta_base(ListaVisitados,Acao) :- 
+einimigo20(no,L),
+einimigo50(no,L),
+eteletransporte(no,L),
+epoco(no,L),
+naopertence(L,ListaVisitados),
+atualiza_loc_mario(L),
+Action = L.
+
+
+naopertence(X,[]).
+naopertence([X,Y],[[U,V]|Ys):- 
+(X = U,Y = V -> fail
+;naopertence([X,Y],Ys)
+).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+step(VisitedTilesList) :-
+    check_current_Perception(Perception),
+    mario_location(ML),
+    format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
+    
+    update_base(Perception),
+    ask_base(VisitedTilesList, Action),
+    format("Estou indo para: ~p~n", [Action]),
+
+    update_score,
+    
+    mario_location(Mloc),
+    VL = [Mloc|VisitedList],
+    standing,
+step_pre(VL).
+
+update_score :-
+    mario_location(ML),
+    gold_location(GL),
+    enemy20_location(E20L),
+	enenmy50_location(E50L),
+	teleport_location(TL),
+update_score(AL, GL, E20L,E50L,TL).
