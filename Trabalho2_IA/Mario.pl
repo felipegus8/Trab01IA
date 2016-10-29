@@ -178,9 +178,9 @@ tamanho_mundo(12).
 
 init_jogo:-
 retractall(energy(_)),assert(energy(100)),
-retractall(visitados(_),assert(visitados(1)),
-retractall(einimigo(_,_)),retractall(eouro(_,_),
-retractall(eteletransporte(_,_),retractall(epoco(_,_),
+retractall(visitados(_)),assert(visitados(1)),
+retractall(einimigo(_,_)),retractall(eouro(_,_)),
+retractall(eteletransporte(_,_)),retractall(epoco(_,_)),
 retractall(casas_visitadas(_)),assert(casas_visitadas([])).
 
 
