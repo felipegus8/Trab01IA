@@ -174,46 +174,64 @@ goldfound(0).
 tamanho_mundo(12).
 
 
+%Init
+
+init_jogo:-
+retractall(energy(_)),assert(energy(100)),
+retractall(visitados(_),assert(visitados(1)),
+retractall(einimigo(_,_)),retractall(eouro(_,_),
+retractall(eteletransporte(_,_),retractall(epoco(_,_),
+retractall(casas_visitadas(_)),assert(casas_visitadas([])).
+
+
+visitar(Xs):-casas_visitadas(Ys),retractall(casas_visitadas(_)),assert(casas_visitadas([Ys|Xs])).
+
 adjacent( [X1, Y1], [X2, Y2] ) :-
 ( X1 = X2, adj( Y1, Y2 )
 ; Y1 = Y2, adj( X1, X2 )
 ).
 
 %Percepções
+formar_percepcao([_pas,_bris,_flas,_bri]) :- position([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
+
+ouviu_passos(L1) :- loc_inimigo(L2),adjacent(L1,L2).
+
+sentiu_brisa(L1) :- loc_poco(L2),adjacent(L1,L2).
+
+percebeu_flash(L1) :-  loc_teletransporte(L2),adjacent(L1,L2).
+
+percebeu_brilho([X1,Y1]) :- loc_ouro([X2.Y2]),X1 = X2,Y1 = Y2.
+
+
+passos(yes):- position([X,Y]),ouviu_passos([X,Y]).
+passos(no).
+
+brisa(yes):- position([X,Y]),sentiu_brisa([X.Y]).
+brisa(no).
+
+flash(yes):- position([X,Y]),percebeu_flash([X,Y]).
+flash(no).
+
+brilho(yes):- position([X,Y]),percebeu_brilho([X,Y]).
+brilho(no).
 
 %Base de conhecimento
 
-adiciona_inimigo20(no):- position([X,Y]),
-Z1 is Y + 1,assumir_inimigo20(no,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo20(no,[X,Z2]),
-Z3 is X + 1,assumir_inimigo20(no,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo20(no,[Z4,Y]).
+adiciona_inimigo(no):- position([X,Y]),
+Z1 is Y + 1,assumir_inimigo(no,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo(no,[X,Z2]),
+Z3 is X + 1,assumir_inimigo(no,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo(no,[Z4,Y]).
 
-assumir_inimigo20(no,L):-retractall(einimigo20(_,L)),assert(einimigo20(no,L)).
-
-adiciona_inimigo20(yes):- position([X,Y]),
-Z1 is Y + 1,assumir_inimigo20(yes,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo20(yes,[X,Z2]),
-Z3 is X + 1,assumir_inimigo20(yes,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo20(yes,[Z4,Y]).
-
-assumir_inimigo20(yes,L):-retractall(einimigo20(_,L)),assert(einimigo20(yes,L)).
-
-adiciona_inimigo50(no):- position([X,Y]),
-Z1 is Y + 1,assumir_inimigo50(no,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo50(no,[X,Z2]),
-Z3 is X + 1,assumir_inimigo50(no,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo50(no,[Z4,Y]).
-
-assumir_inimigo50(no,L):-retractall(einimigo50(_,L)),assert(einimigo50(no,L)).
-
-adiciona_inimigo50(yes):- position([X,Y]),
+adiciona_inimigo(yes):- position([X,Y]),
 Z1 is Y + 1,assumir_inimigo50(yes,[X,Z1]),
 Z2 is Y - 1,assumir_inimigo50(yes,[X,Z2]),
 Z3 is X + 1,assumir_inimigo50(yes,[Z3,Y]),
 Z4 is X - 1,assumir_inimigo50(yes,[Z4,Y]).
 
-assumir_inimigo50(yes,L):-retractall(einimigo50(_,L)),assert(einimigo50(yes,L)).
+assumir_inimigo(no,L):-retractall(einimigo(_,L)),assert(einimigo(no,L)).
+
+assumir_inimigo(yes,L):-retractall(einimigo(_,L)),assert(einimigo(yes,L)).
 
 adiciona_teletransporte(no):- position([X,Y]),
 Z1 is Y + 1,assumir_teletransporte(no,[X,Z1]),
@@ -221,14 +239,13 @@ Z2 is Y - 1,assumir_teletransporte(no,[X,Z2]),
 Z3 is X + 1,assumir_teletransporte(no,[Z3,Y]),
 Z4 is X - 1,assumir_teletransporte(no,[Z4,Y]).
 
-assumir_teletransporte(no,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(no,L)).
-
 adiciona_teletransporte(yes):- position([X,Y]),
 Z1 is Y + 1,assumir_teletransporte(yes,[X,Z1]),
 Z2 is Y - 1,assumir_teletransporte(yes,[X,Z2]),
 Z3 is X + 1,assumir_teletransporte(yes,[Z3,Y]),
 Z4 is X - 1,assumir_teletransporte(yes,[Z4,Y]).
 
+assumir_teletransporte(no,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(no,L)).
 
 assumir_teletransporte(yes,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(yes,L)).
 
@@ -238,26 +255,26 @@ Z2 is Y - 1,assumir_poco(no,[X,Z2]),
 Z3 is X + 1,assumir_poco(no,[Z3,Y]),
 Z4 is X - 1,assumir_poco(no,[Z4,Y]).
 
-assumir_poco(no,L):-retractall(epoco(_,L)),assert(epoco(no,L)).
-
 adiciona_poco(yes):- position([X,Y]),
 Z1 is Y + 1,assumir_poco(yes,[X,Z1]),
 Z2 is Y - 1,assumir_poco(yes,[X,Z2]),
 Z3 is X + 1,assumir_poco(yes,[Z3,Y]),
 Z4 is X - 1,assumir_poco(yes,[Z4,Y]).
 
+
+assumir_poco(no,L):-retractall(epoco(_,L)),assert(epoco(no,L)).
+
 assumir_poco(yes,L):-retractall(epoco(_,L)),assert(epoco(yes,L)).
 
 adiciona_ouro(no):- loc_ouro(GL),
 assumir_ouro(no,GL).
 
-assumir_ouro(no,L):-retractall(eouro(_,L)),assert(eouro(no,L)).
-
 adiciona_ouro(yes):- position([X,Y]),
-loc_gold([X1,Y1]),
+loc_ouro([X1,Y1]),
 X = X1, Y = Y1,
 assumir_ouro(yes,[X1,Y1]).
 
+assumir_ouro(no,L):-retractall(eouro(_,L)),assert(eouro(no,L)).
 assumir_ouro(yes,L):-retractall(eouro(_,L)),assert(eouro(yes,L)).
 
 posicoes_permitidas([X,Y]) :-
@@ -277,7 +294,7 @@ Action = L.
 
 
 naopertence(X,[]).
-naopertence([X,Y],[[U,V]|Ys):- 
+naopertence([X,Y],[[U,V]|Ys]):- 
 (X = U,Y = V -> fail
 ;naopertence([X,Y],Ys)
 ).
