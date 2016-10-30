@@ -1,3 +1,14 @@
+:- dynamic([mario_location/1,
+loc_powerup/1,
+loc_inimigo/1,
+loc_teletransporte/1,
+loc_ouro/1,
+loc_poco/1,
+energy/1,
+tamanho_mundo/1,
+casas_visitadas/1
+]).
+
 %% Inicializando o mapa
 tile(1,1).
 tile(1,2).
@@ -167,16 +178,42 @@ adj(12,11).
 adj(11,12).
 
 
-position(1,1).
-energy(100).
-goldfound(0).
 
 tamanho_mundo(12).
 
+%Só pra poder testar sem o java ainda
+
+loc_ouro([9,2]).
+loc_ouro([3,8]).
+loc_ouro([11,11]).
+
+loc_inimigo([4,2]).
+loc_inimigo([7,5]).
+loc_inimigo([10,11]).
+loc_inimigo([11,5]).
+
+loc_teletransporte([10,12]).
+loc_teletransporte([4,2]).
+loc_teletransporte([1,5]).
+loc_teletransporte([7,10]).
+
+loc_poco([2,2]).
+loc_poco([10,3]).
+loc_poco([4,5]).
+loc_poco([7,4]).
+loc_poco([10,7]).
+loc_poco([11,10]).
+loc_poco([3,10]).
+loc_poco([5,11]).
+
+loc_powerup([1,1]).
+loc_powerup([7,6]).
+loc_powerup([2,11]).
 
 %Init
 
 init_jogo:-
+retractall(mario_location(_,_)),assert(mario_location([1,1]))
 retractall(energy(_)),assert(energy(100)),
 retractall(visitados(_)),assert(visitados(1)),
 retractall(einimigo(_,_)),retractall(eouro(_,_)),
@@ -191,8 +228,10 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 ; Y1 = Y2, adj( X1, X2 )
 ).
 
+
+
 %Percepções
-formar_percepcao([_pas,_bris,_flas,_bri]) :- position([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
+formar_percepcao([_pas,_bris,_flas,_bri]) :- mario_location([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
 
 ouviu_passos(L1) :- loc_inimigo(L2),adjacent(L1,L2).
 
@@ -215,15 +254,43 @@ flash(no).
 brilho(yes):- position([X,Y]),percebeu_brilho([X,Y]).
 brilho(no).
 
+%Atualiza pontuação
+
+update_energy :-
+mario_location(ML),
+loc_ouro(GL),
+loc_poco(PL),
+loc_teletransporte(TL),
+loc_inimigo(EL),
+loc_powerup(UL),
+update_energy(ML, GL,PL,TL,EL,UL).
+
+update_energy(P) :- energy(E),
+newEnergy is E+P,
+retractall(energy(_)),
+assert(energy(newEnergy)).
+
+
+
+update_energy(ML,ML,_,_,_,_) :- update_energy(1000).
+
+update_energy(_,_,_,_,_,_) :- update_energy(-1).
+
+update_energy(ML,_,ML,_,_,_) :- update_energy(-1000).
+
+update_energy(ML,_,_,_,ML,_) :- random_between(20,50,X),update_energy(-X).
+
+update_energy(ML,_,_,_,_,ML) :- update_energy(20).
+
 %Base de conhecimento
 
-adiciona_inimigo(no):- position([X,Y]),
+adiciona_inimigo(no):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_inimigo(no,[X,Z1]),
 Z2 is Y - 1,assumir_inimigo(no,[X,Z2]),
 Z3 is X + 1,assumir_inimigo(no,[Z3,Y]),
 Z4 is X - 1,assumir_inimigo(no,[Z4,Y]).
 
-adiciona_inimigo(yes):- position([X,Y]),
+adiciona_inimigo(yes):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_inimigo50(yes,[X,Z1]),
 Z2 is Y - 1,assumir_inimigo50(yes,[X,Z2]),
 Z3 is X + 1,assumir_inimigo50(yes,[Z3,Y]),
@@ -233,13 +300,13 @@ assumir_inimigo(no,L):-retractall(einimigo(_,L)),assert(einimigo(no,L)).
 
 assumir_inimigo(yes,L):-retractall(einimigo(_,L)),assert(einimigo(yes,L)).
 
-adiciona_teletransporte(no):- position([X,Y]),
+adiciona_teletransporte(no):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_teletransporte(no,[X,Z1]),
 Z2 is Y - 1,assumir_teletransporte(no,[X,Z2]),
 Z3 is X + 1,assumir_teletransporte(no,[Z3,Y]),
 Z4 is X - 1,assumir_teletransporte(no,[Z4,Y]).
 
-adiciona_teletransporte(yes):- position([X,Y]),
+adiciona_teletransporte(yes):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_teletransporte(yes,[X,Z1]),
 Z2 is Y - 1,assumir_teletransporte(yes,[X,Z2]),
 Z3 is X + 1,assumir_teletransporte(yes,[Z3,Y]),
@@ -249,13 +316,13 @@ assumir_teletransporte(no,L):-retractall(eteletransporte(_,L)),assert(eteletrans
 
 assumir_teletransporte(yes,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(yes,L)).
 
-adiciona_poco(no):- position([X,Y]),
+adiciona_poco(no):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_poco(no,[X,Z1]),
 Z2 is Y - 1,assumir_poco(no,[X,Z2]),
 Z3 is X + 1,assumir_poco(no,[Z3,Y]),
 Z4 is X - 1,assumir_poco(no,[Z4,Y]).
 
-adiciona_poco(yes):- position([X,Y]),
+adiciona_poco(yes):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_poco(yes,[X,Z1]),
 Z2 is Y - 1,assumir_poco(yes,[X,Z2]),
 Z3 is X + 1,assumir_poco(yes,[Z3,Y]),
@@ -269,7 +336,7 @@ assumir_poco(yes,L):-retractall(epoco(_,L)),assert(epoco(yes,L)).
 adiciona_ouro(no):- loc_ouro(GL),
 assumir_ouro(no,GL).
 
-adiciona_ouro(yes):- position([X,Y]),
+adiciona_ouro(yes):- mario_location([X,Y]),
 loc_ouro([X1,Y1]),
 X = X1, Y = Y1,
 assumir_ouro(yes,[X1,Y1]).
@@ -289,7 +356,7 @@ einimigo50(no,L),
 eteletransporte(no,L),
 epoco(no,L),
 naopertence(L,ListaVisitados),
-atualiza_loc_mario(L),
+atualiza_marioloc(L),
 Action = L.
 
 
@@ -360,8 +427,8 @@ step(VisitedTilesList) :-
     format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
     
     update_base(Perception),
-    ask_base(VisitedTilesList, Action),
-    format("Estou indo para: ~p~n", [Action]),
+    pergunta_base(VisitedTilesList, Acao),
+    format("Estou indo para: ~p~n", [Acao]),
 
     update_score,
     
@@ -370,10 +437,4 @@ step(VisitedTilesList) :-
     standing,
 step_pre(VL).
 
-update_score :-
-    mario_location(ML),
-    gold_location(GL),
-    enemy20_location(E20L),
-	enenmy50_location(E50L),
-	teleport_location(TL),
-update_score(AL, GL, E20L,E50L,TL).
+
