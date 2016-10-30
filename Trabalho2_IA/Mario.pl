@@ -228,10 +228,29 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 ; Y1 = Y2, adj( X1, X2 )
 ).
 
+%Movimento
+
+step(VisitedTilesList) :-
+formula_percepcao_completa(Percepcao),
+mario_location(ML),
+format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
+
+atualiza_base(Perception),
+pergunta_base(VisitedTilesList, Acao),
+format("Estou indo para: ~p~n", [Acao]),
+
+update_energy,
+
+mario_location(Mloc),
+VL = [Mloc|VisitedList],
+standing,
+step_pre(VL).
 
 
 %Percepções
 formar_percepcao([_pas,_bris,_flas,_bri]) :- mario_location([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
+
+formula_percepcao_completa([pas,bris,flas,bri]) :- passos(pas),brisa(bris),flash(flas),brilho(bri).
 
 ouviu_passos(L1) :- loc_inimigo(L2),adjacent(L1,L2).
 
@@ -271,7 +290,6 @@ retractall(energy(_)),
 assert(energy(newEnergy)).
 
 
-
 update_energy(ML,ML,_,_,_,_) :- update_energy(1000).
 
 update_energy(_,_,_,_,_,_) :- update_energy(-1).
@@ -282,7 +300,18 @@ update_energy(ML,_,_,_,ML,_) :- random_between(20,50,X),update_energy(-X).
 
 update_energy(ML,_,_,_,_,ML) :- update_energy(20).
 
+update_energy(ML,_,_,ML,_,_) :- random_between(1,12,X),random_between(1,12,Y),retractall(mario_location(_,_)),assert(mario_location([X,Y])).
+
+atualiza_marioloc(NovaLoc) :- mario_location(ML),retractall(mario_location(_,_)),assert(mario_location(NovaLoc)).
 %Base de conhecimento
+
+atualiza_base([pas,bris,flas,bri]) :- adiciona_inimigo(pas),
+adiciona_poco(bris),
+adiciona_teletransporte(flas),
+adiciona_ouro(bri).
+
+
+
 
 adiciona_inimigo(no):- mario_location([X,Y]),
 Z1 is Y + 1,assumir_inimigo(no,[X,Z1]),
@@ -351,8 +380,7 @@ posicoes_permitidas([X,Y]) :-
 	
 	
 pergunta_base(ListaVisitados,Acao) :- 
-einimigo20(no,L),
-einimigo50(no,L),
+einimigo(no,L),
 eteletransporte(no,L),
 epoco(no,L),
 naopertence(L,ListaVisitados),
@@ -365,76 +393,4 @@ naopertence([X,Y],[[U,V]|Ys]):-
 (X = U,Y = V -> fail
 ;naopertence([X,Y],Ys)
 ).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-step(VisitedTilesList) :-
-    check_current_Perception(Perception),
-    mario_location(ML),
-    format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
-    
-    update_base(Perception),
-    pergunta_base(VisitedTilesList, Acao),
-    format("Estou indo para: ~p~n", [Acao]),
-
-    update_score,
-    
-    mario_location(Mloc),
-    VL = [Mloc|VisitedList],
-    standing,
-step_pre(VL).
-
 
