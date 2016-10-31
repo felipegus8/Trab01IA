@@ -7,6 +7,7 @@ loc_poco/1,
 energy/1,
 tamanho_mundo/1,
 casas_visitadas/1
+ourosencontrados/1
 ]).
 
 %% Inicializando o mapa
@@ -180,7 +181,7 @@ adj(11,12).
 
 
 tamanho_mundo(12).
-
+ourosencontrados(0).
 %Só pra poder testar sem o java ainda
 
 loc_ouro([9,2]).
@@ -210,6 +211,7 @@ loc_powerup([1,1]).
 loc_powerup([7,6]).
 loc_powerup([2,11]).
 
+start :- init_jogo,step([1,1]).
 %Init
 
 init_jogo:-
@@ -229,6 +231,9 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 ).
 
 %Movimento
+step_pre(VisitedTilesList):-
+(ourosencontrados(X),X = 3);(energy(Y),Y <= 0);step(VisitedTilesList).
+
 
 step(VisitedTilesList) :-
 formula_percepcao_completa(Percepcao),
@@ -243,7 +248,6 @@ update_energy,
 
 mario_location(Mloc),
 VL = [Mloc|VisitedList],
-standing,
 step_pre(VL).
 
 
