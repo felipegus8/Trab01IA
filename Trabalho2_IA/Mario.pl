@@ -6,7 +6,7 @@ loc_ouro/1,
 loc_poco/1,
 energy/1,
 tamanho_mundo/1,
-casas_visitadas/1
+casas_visitadas/1,
 ourosencontrados/1
 ]).
 
@@ -212,15 +212,16 @@ loc_powerup([7,6]).
 loc_powerup([2,11]).
 
 start :- init_jogo,step([1,1]).
-%Init
 
+%Init
 init_jogo:-
-retractall(mario_location(_,_)),assert(mario_location([1,1]))
+retractall(mario_location(_,_)),assert(mario_location([1,1])),
 retractall(energy(_)),assert(energy(100)),
 retractall(visitados(_)),assert(visitados(1)),
 retractall(einimigo(_,_)),retractall(eouro(_,_)),
 retractall(eteletransporte(_,_)),retractall(epoco(_,_)),
-retractall(casas_visitadas(_)),assert(casas_visitadas([])).
+retractall(casas_visitadas(_)),assert(casas_visitadas([])),
+format("Passou pelo init").
 
 
 visitar(Xs):-casas_visitadas(Ys),retractall(casas_visitadas(_)),assert(casas_visitadas([Ys|Xs])).
@@ -232,10 +233,15 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 
 %Movimento
 step_pre(VisitedTilesList):-
-(ourosencontrados(X),X = 3);(energy(Y),Y <= 0);step(VisitedTilesList).
+ourosencontrados(X),
+energy(Y),
+(X = 3 ;
+Y =< 0;
+step(VisitedTilesList)).
 
 
 step(VisitedTilesList) :-
+format("Chegou aqui"),
 formula_percepcao_completa(Percepcao),
 mario_location(ML),
 format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
@@ -265,16 +271,16 @@ percebeu_flash(L1) :-  loc_teletransporte(L2),adjacent(L1,L2).
 percebeu_brilho([X1,Y1]) :- loc_ouro([X2.Y2]),X1 = X2,Y1 = Y2.
 
 
-passos(yes):- position([X,Y]),ouviu_passos([X,Y]).
+passos(yes):- mario_location([X,Y]),ouviu_passos([X,Y]).
 passos(no).
 
-brisa(yes):- position([X,Y]),sentiu_brisa([X.Y]).
+brisa(yes):- mario_location([X,Y]),sentiu_brisa([X.Y]).
 brisa(no).
 
-flash(yes):- position([X,Y]),percebeu_flash([X,Y]).
+flash(yes):- mario_location([X,Y]),percebeu_flash([X,Y]).
 flash(no).
 
-brilho(yes):- position([X,Y]),percebeu_brilho([X,Y]).
+brilho(yes):- mario_location([X,Y]),percebeu_brilho([X,Y]).
 brilho(no).
 
 %Atualiza pontuação
