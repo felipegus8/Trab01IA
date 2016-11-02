@@ -230,14 +230,19 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 ( X1 = X2, adj( Y1, Y2 )
 ; Y1 = Y2, adj( X1, X2 )
 ).
+mark_visited_position(Position) :-
+	assert(agent_knowledge(Position, visited)).
 
 %Movimento
-dir :- mario_location(X,Y),X < 12,retractall(mario_location(X,Y),NX is X+1,assert(mario_location(NX,Y)).
-esq :- mario_location(X,Y),X > 1,retractall(mario_location(X,Y),NX is X-1,assert(mario_location(NX,Y)).
-cim :- mario_location(X,Y),Y < 12,retractall(mario_location(X,Y),NY is Y+1,assert(mario_location(X,NY)).
-bai :- mario_location(X,Y),Y > 1,retractall(mario_location(X,Y),NY is Y-1,assert(mario_location(X,NY)).
+dir :- mario_location([X,Y]),X < 12,retractall(mario_location([X,Y])),NX is X+1,assert(mario_location([NX,Y])).
+esq :- mario_location([X,Y]),X > 1,retractall(mario_location([X,Y])),NX is X-1,assert(mario_location([NX,Y])).
+cim :- mario_location([X,Y]),Y < 12,retractall(mario_location([X,Y])),NY is Y+1,assert(mario_location([X,NY])).
+bai :- mario_location([X,Y]),Y > 1,retractall(mario_location([X,Y])),NY is Y-1,assert(mario_location([X,NY])).
  
-
+step(mario_location([X,Y]),1) :- format("Entrou aqui"),cim,format("Passou"),,mark_visited_position([X,Y]).
+step(mario_location([X,Y]),2) :- bai,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
+step(mario_location([X,Y]),3) :- dir,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
+step(mario_location([X,Y]),4) :- esq,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
 
 %Percepções
 formar_percepcao([_pas,_bris,_flas,_bri]) :- mario_location([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
@@ -282,7 +287,7 @@ retractall(energy(_)),
 assert(energy(newEnergy)).
 
 
-update_energy(ML,ML,_,_,_,_) :- update_score(1000).
+update_energy(ML,ML,_,_,_,_) :- update_score(1000),update_ouros(1).
 
 update_energy(_,_,_,_,_,_) :- update_score(-1).
 
@@ -298,6 +303,11 @@ update_score(N) :- score(S),
 newscore is S+N,
 retractall(score(_)),
 assert(score(newscore)).
+
+update_ouros(X) :- ourosencontrados(O),
+newO is O+X,
+retractall(ourosencontrados(_)),
+assert(ourosencontrados(newO)).
 
 atualiza_marioloc(NovaLoc) :- mario_location(ML),retractall(mario_location(_,_)),assert(mario_location(NovaLoc)).
 %Base de conhecimento
@@ -317,10 +327,10 @@ Z3 is X + 1,assumir_inimigo(no,[Z3,Y]),
 Z4 is X - 1,assumir_inimigo(no,[Z4,Y]).
 
 adiciona_inimigo(yes):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_inimigo50(yes,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo50(yes,[X,Z2]),
-Z3 is X + 1,assumir_inimigo50(yes,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo50(yes,[Z4,Y]).
+Z1 is Y + 1,assumir_inimigo(yes,[X,Z1]),
+Z2 is Y - 1,assumir_inimigo(yes,[X,Z2]),
+Z3 is X + 1,assumir_inimigo(yes,[Z3,Y]),
+Z4 is X - 1,assumir_inimigo(yes,[Z4,Y]).
 
 assumir_inimigo(no,L):-retractall(einimigo(_,L)),assert(einimigo(no,L)).
 
