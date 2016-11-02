@@ -5,6 +5,7 @@ loc_teletransporte/1,
 loc_ouro/1,
 loc_poco/1,
 energy/1,
+score/1,
 tamanho_mundo/1,
 casas_visitadas/1,
 ourosencontrados/1
@@ -211,12 +212,12 @@ loc_powerup([1,1]).
 loc_powerup([7,6]).
 loc_powerup([2,11]).
 
-start :- init_jogo,step([1,1]).
 
 %Init
 init_jogo:-
 retractall(mario_location(_,_)),assert(mario_location([1,1])),
 retractall(energy(_)),assert(energy(100)),
+retractall(score()),assert(score(0)),
 retractall(visitados(_)),assert(visitados(1)),
 retractall(einimigo(_,_)),retractall(eouro(_,_)),
 retractall(eteletransporte(_,_)),retractall(epoco(_,_)),
@@ -224,7 +225,6 @@ retractall(casas_visitadas(_)),assert(casas_visitadas([])),
 format("Passou pelo init").
 
 
-visitar(Xs):-casas_visitadas(Ys),retractall(casas_visitadas(_)),assert(casas_visitadas([Ys|Xs])).
 
 adjacent( [X1, Y1], [X2, Y2] ) :-
 ( X1 = X2, adj( Y1, Y2 )
@@ -232,29 +232,11 @@ adjacent( [X1, Y1], [X2, Y2] ) :-
 ).
 
 %Movimento
-step_pre(VisitedTilesList):-
-ourosencontrados(X),
-energy(Y),
-(X = 3 ;
-Y =< 0;
-step(VisitedTilesList)).
-
-
-step(VisitedTilesList) :-
-format("Chegou aqui"),
-formula_percepcao_completa(Percepcao),
-mario_location(ML),
-format("Estou em ~p, vendo: ~p~n", [ML,Perception]),
-
-atualiza_base(Perception),
-pergunta_base(VisitedTilesList, Acao),
-format("Estou indo para: ~p~n", [Acao]),
-
-update_energy,
-
-mario_location(Mloc),
-VL = [Mloc|VisitedList],
-step_pre(VL).
+dir :- mario_location(X,Y),X < 12,retractall(mario_location(X,Y),NX is X+1,assert(mario_location(NX,Y)).
+esq :- mario_location(X,Y),X > 1,retractall(mario_location(X,Y),NX is X-1,assert(mario_location(NX,Y)).
+cim :- mario_location(X,Y),Y < 12,retractall(mario_location(X,Y),NY is Y+1,assert(mario_location(X,NY)).
+bai :- mario_location(X,Y),Y > 1,retractall(mario_location(X,Y),NY is Y-1,assert(mario_location(X,NY)).
+ 
 
 
 %Percepções
@@ -300,17 +282,22 @@ retractall(energy(_)),
 assert(energy(newEnergy)).
 
 
-update_energy(ML,ML,_,_,_,_) :- update_energy(1000).
+update_energy(ML,ML,_,_,_,_) :- update_score(1000).
 
-update_energy(_,_,_,_,_,_) :- update_energy(-1).
+update_energy(_,_,_,_,_,_) :- update_score(-1).
 
-update_energy(ML,_,ML,_,_,_) :- update_energy(-1000).
+update_energy(ML,_,ML,_,_,_) :- update_score(-1000).
 
 update_energy(ML,_,_,_,ML,_) :- random_between(20,50,X),update_energy(-X).
 
 update_energy(ML,_,_,_,_,ML) :- update_energy(20).
 
 update_energy(ML,_,_,ML,_,_) :- random_between(1,12,X),random_between(1,12,Y),retractall(mario_location(_,_)),assert(mario_location([X,Y])).
+
+update_score(N) :- score(S),
+newscore is S+N,
+retractall(score(_)),
+assert(score(newscore)).
 
 atualiza_marioloc(NovaLoc) :- mario_location(ML),retractall(mario_location(_,_)),assert(mario_location(NovaLoc)).
 %Base de conhecimento
