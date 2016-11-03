@@ -1,9 +1,9 @@
-:- dynamic(inicio/2,
+:- dynamic([inicio/2,
 parede/2,
 vazia/2,
 inimigo/2,
 ouro/2,
-power_up/2
+power_up/2,
 poco/2,
 teletransporte/2,
 inimigo/4,
@@ -254,9 +254,9 @@ mark_visited_position(Position) :-
 %Movimento
 estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao).
 
-mario_andar() :- ((mario_location(_,_,direita),Prox = baixo);(mario_location(_,_,esquerda),Prox = cima);(mario_location(_,_,baixo),Prox = esquerda);(mario_location(_,_,cima),Prox = direita)),ir_Para(Prox);
+mario_andar() :- ((mario_location(_,_,direita),Prox = baixo);(mario_location(_,_,esquerda),Prox = cima);(mario_location(_,_,baixo),Prox = esquerda);(mario_location(_,_,cima),Prox = direita)),ir_Para(Prox).
 
-mario_andar_esquerda :- ((mario_location(_,_,direita),Prox = cima);(mario_location(_,_,esquerda),Prox = baixo);(mario_location(_,_,baixo),Prox = direita);(mario_location(_,_,cima),Prox = esquerda)),ir_Para(Prox);
+mario_andar_esquerda :- ((mario_location(_,_,direita),Prox = cima);(mario_location(_,_,esquerda),Prox = baixo);(mario_location(_,_,baixo),Prox = direita);(mario_location(_,_,cima),Prox = esquerda)),ir_Para(Prox).
 
 ir_Para(Prox) :-  mario_location(X,Y,_),retractall(mario_location(X,Y,_)),assert(mario_location(X,Y,Prox)),atualiza_score(-1).
 
@@ -265,30 +265,22 @@ mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 - 1,Y2 = Y,Posicao 
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 - 1,X2 = X,Posicao = cima,!.
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 + 1,X2 = X,Posicao = baixo,!.
 %Percepções
-formar_percepcao([_pas,_bris,_flas,_bri]) :- mario_location([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
 
-formula_percepcao_completa([pas,bris,flas,bri]) :- passos(pas),brisa(bris),flash(flas),brilho(bri).
+ouviu_passos_inimigo(X,Y) :-adjacente(X,Y,X2,Y2),inimigo(_,_,X2,Y2),!.
+ouviu_passos_inimigo() :- mario_location(X,Y,_),ouviu_passos_inimigo(X,Y),!.
 
-ouviu_passos(L1) :- loc_inimigo(L2),adjacent(L1,L2).
+sentiu_brisa_poco(X,Y) :- adjacente(X,Y,X2,Y2),poco(X2,Y2),!.
+sentiu_brisa_poco() :- mario_location(X,Y,_),sentiu_brisa_poco(X,Y),!.
 
-sentiu_brisa(L1) :- loc_poco(L2),adjacent(L1,L2).
+percebeu_flash_teletransporte(X,Y) :- adjacente(X,Y,X2,Y2),teletransporte(X2,Y2),!.
+percebeu_flash_teletransporte() :- mario_location(X,Y,_),percebeu_flash_teletransporte(X,Y),!.
 
-percebeu_flash(L1) :-  loc_teletransporte(L2),adjacent(L1,L2).
+percebeu_algum_perigo(X,Y):- (ouviu_passos_inimigo(X,Y);sentiu_brisa_poco(X,Y);percebeu_flash_teletransporte(X,Y)).
+percebeu_algum_perigo() :- mario_location(X,Y,_),percebeu_algum_perigo(X,Y).
 
 percebeu_brilho([X1,Y1]) :- loc_ouro([X2.Y2]),X1 = X2,Y1 = Y2.
 
 
-passos(yes):- mario_location([X,Y]),ouviu_passos([X,Y]).
-passos(no).
-
-brisa(yes):- mario_location([X,Y]),sentiu_brisa([X.Y]).
-brisa(no).
-
-flash(yes):- mario_location([X,Y]),percebeu_flash([X,Y]).
-flash(no).
-
-brilho(yes):- mario_location([X,Y]),percebeu_brilho([X,Y]).
-brilho(no).
 
 %Atualiza pontuação
 
@@ -331,76 +323,106 @@ newO is O+X,
 retractall(ourosencontrados(_)),
 assert(ourosencontrados(newO)).
 
-atualiza_marioloc(NovaLoc) :- mario_location(ML),retractall(mario_location(_,_)),assert(mario_location(NovaLoc)).
 %Base de conhecimento
 
-atualiza_base([pas,bris,flas,bri]) :- adiciona_inimigo(pas),
-adiciona_poco(bris),
-adiciona_teletransporte(flas),
-adiciona_ouro(bri).
+%Atualiza todas as certezas do Mario
+atualizar_certezas_teletransporte() :- teletransporte(X,Y),pode_ter_teletransporte(X,Y),X2 is X+1,X3 is X-1,Y2 is Y + 1,Y3 is Y - 1,
+(
+	((parede(X2,Y));visitadas(X2,Y)),
+	((parede(X3,Y));visitadas(X3,Y)),
+	((parede(X,Y2));visitadas(X,Y2)),
+	((parede(X,Y3));visitadas(X,Y3))
+),
+retractall(pode_ter_teletransporte(X,Y)),assert(tem_teletransporte(X,Y)).
+
+atualizar_certezas_poco() :- poco(X,Y),pode_ter_poco(X,Y),X2 is X+1,X3 is X-1,Y2 is Y + 1,Y3 is Y - 1,
+(
+	((parede(X2,Y));visitadas(X2,Y)),
+	((parede(X3,Y));visitadas(X3,Y)),
+	((parede(X,Y2));visitadas(X,Y2)),
+	((parede(X,Y3));visitadas(X,Y3))
+),
+retractall(pode_ter_poco(X,Y)),assert(tem_poco(X,Y)).
+
+atualizar_certezas_inimigo() :- inimigo(X,Y),pode_ter_inimigo(X,Y),X2 is X+1,X3 is X-1,Y2 is Y + 1,Y3 is Y - 1,
+(
+	((parede(X2,Y));visitadas(X2,Y)),
+	((parede(X3,Y));visitadas(X3,Y)),
+	((parede(X,Y2));visitadas(X,Y2)),
+	((parede(X,Y3));visitadas(X,Y3))
+),
+retractall(pode_ter_inimigo(X,Y)),assert(tem_inimigo(X,Y)).
+
+atualizar_certezas() :- (atualizar_certezas_teletransporte();0=0),(atualizar_certezas_poco();0=0),(atualizar_certezas_inimigo();0=0),!. 
+
+%Remover incertezas
+
+remover_incertezas_casa_atual():- mario_location(X,Y,_),
+(
+		((not(poco(X,Y)),assert(nao_tem_poco(X,Y)),retractall(pode_ter_poco(X,Y)));0=0),
+		((not(inimigo(X,Y)),assert(nao_tem_inimigo(X,Y)),retractall(pode_ter_inimigo(X,Y)));0=0),
+		((not(teletransporte(X,Y)),assert(nao_tem_teletransporte(X,Y)),retractall(pode_ter_teletransporte(X,Y)));0 = 0)
+		
+).
+
+atualizar_incertezas():-
+(
+	(remover_incertezas_casa_atual();0=0),
+	((ouviu_passos_inimigo(),pergunta_pode_ter_inimigo());0=0),
+	((percebeu_flash_teletransporte(),pergunta_pode_ter_teletransporte());0=0),
+	((sentiu_brisa_poco(),pergunta_pode_ter_poco());0=0),
+	((not(ouviu_passos_inimigo()),remover_incerteza_inimigo_adjacente());0=0),
+	((not(percebeu_flash_teletransporte()),remover_incerteza_teletransporte_adjacente());0=0),
+	((not(sentiu_brisa_poco()),remover_incerteza_poco_adjacente());0=0),
+	((atualizar_certezas();0=0))
+).
 
 
 
 
-adiciona_inimigo(no):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_inimigo(no,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo(no,[X,Z2]),
-Z3 is X + 1,assumir_inimigo(no,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo(no,[Z4,Y]).
+remover_incerteza_poco_adjacente(X,Y):- assert(nao_tem_poco(X,Y)),retractall(pode_ter_poco(X,Y)).
+remover_incerteza_poco_adjacente():- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),remover_incerteza_poco_adjacente(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),remover_incerteza_poco_adjacente(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),remover_incerteza_poco_adjacente(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),remover_incerteza_poco_adjacente(X,Y3));0=0).
 
-adiciona_inimigo(yes):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_inimigo(yes,[X,Z1]),
-Z2 is Y - 1,assumir_inimigo(yes,[X,Z2]),
-Z3 is X + 1,assumir_inimigo(yes,[Z3,Y]),
-Z4 is X - 1,assumir_inimigo(yes,[Z4,Y]).
+remover_incerteza_inimigo_adjacente(X,Y):- assert(nao_tem_inimigo(X,Y)),retractall(pode_ter_inimigo(X,Y)).
+remover_incerteza_inimigo_adjacente():- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),remover_incerteza_inimigo_adjacente(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),remover_incerteza_inimigo_adjacente(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),remover_incerteza_inimigo_adjacente(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),remover_incerteza_inimigo_adjacente(X,Y3));0=0).
 
-assumir_inimigo(no,L):-retractall(einimigo(_,L)),assert(einimigo(no,L)).
+remover_incerteza_teletransporte_adjacente(X,Y):- assert(nao_tem_teletransporte(X,Y)),retractall(pode_ter_teletransporte(X,Y)).
+remover_incerteza_teletransporte_adjacente():- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),remover_incerteza_teletransporte_adjacente(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),remover_incerteza_teletransporte_adjacente(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),remover_incerteza_teletransporte_adjacente(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),remover_incerteza_teletransporte_adjacente(X,Y3));0=0).
 
-assumir_inimigo(yes,L):-retractall(einimigo(_,L)),assert(einimigo(yes,L)).
+%Vendo o que pode ter em cada posicao adjacente a posição atual.
 
-adiciona_teletransporte(no):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_teletransporte(no,[X,Z1]),
-Z2 is Y - 1,assumir_teletransporte(no,[X,Z2]),
-Z3 is X + 1,assumir_teletransporte(no,[Z3,Y]),
-Z4 is X - 1,assumir_teletransporte(no,[Z4,Y]).
+pergunta_pode_ter_poco(X,Y) :- not(visitadas(X,Y)),not(nao_tem_poco(X,Y)),assert(pode_ter_poco(X,Y)),!.
+adjacente_pode_ter_poco() :- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),pode_ter_poco(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),pode_ter_poco(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),pode_ter_poco(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),pode_ter_poco(X,Y3));0=0).
 
-adiciona_teletransporte(yes):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_teletransporte(yes,[X,Z1]),
-Z2 is Y - 1,assumir_teletransporte(yes,[X,Z2]),
-Z3 is X + 1,assumir_teletransporte(yes,[Z3,Y]),
-Z4 is X - 1,assumir_teletransporte(yes,[Z4,Y]).
+pergunta_pode_ter_teletransporte(X,Y) :- not(visitadas(X,Y)),not(nao_tem_teletransporte(X,Y)),assert(pode_ter_teletransporte(X,Y)),!.
+adjacente_pode_ter_teletransporte() :- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),pode_ter_teletransporte(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),pode_ter_teletransporte(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),pode_ter_teletransporte(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),pode_ter_teletransporte(X,Y3));0=0).
 
-assumir_teletransporte(no,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(no,L)).
-
-assumir_teletransporte(yes,L):-retractall(eteletransporte(_,L)),assert(eteletransporte(yes,L)).
-
-adiciona_poco(no):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_poco(no,[X,Z1]),
-Z2 is Y - 1,assumir_poco(no,[X,Z2]),
-Z3 is X + 1,assumir_poco(no,[Z3,Y]),
-Z4 is X - 1,assumir_poco(no,[Z4,Y]).
-
-adiciona_poco(yes):- mario_location([X,Y]),
-Z1 is Y + 1,assumir_poco(yes,[X,Z1]),
-Z2 is Y - 1,assumir_poco(yes,[X,Z2]),
-Z3 is X + 1,assumir_poco(yes,[Z3,Y]),
-Z4 is X - 1,assumir_poco(yes,[Z4,Y]).
-
-
-assumir_poco(no,L):-retractall(epoco(_,L)),assert(epoco(no,L)).
-
-assumir_poco(yes,L):-retractall(epoco(_,L)),assert(epoco(yes,L)).
-
-adiciona_ouro(no):- loc_ouro(GL),
-assumir_ouro(no,GL).
-
-adiciona_ouro(yes):- mario_location([X,Y]),
-loc_ouro([X1,Y1]),
-X = X1, Y = Y1,
-assumir_ouro(yes,[X1,Y1]).
-
-assumir_ouro(no,L):-retractall(eouro(_,L)),assert(eouro(no,L)).
-assumir_ouro(yes,L):-retractall(eouro(_,L)),assert(eouro(yes,L)).
+pergunta_pode_ter_inimigo(X,Y) :- not(visitadas(X,Y)),not(nao_tem_inimigo(X,Y)),assert(pode_ter_inimigo(X,Y)),!.
+adjacente_pode_ter_inimigo() :- mario_location(X,Y,_),
+((X2 is X  + 1,adjacente(X,Y,X2,Y),pode_ter_inimigo(X2,Y));0=0),
+((X3 is X  - 1,adjacente(X,Y,X3,Y),pode_ter_inimigo(X3,Y));0=0),
+((Y2 is Y  + 1,adjacente(X,Y,X,Y2),pode_ter_inimigo(X,Y2));0=0),
+((Y3 is Y  - 1,adjacente(X,Y,X,Y3),pode_ter_inimigo(X,Y3));0=0).
 
 posicoes_permitidas([X,Y]) :-
     tamanho_mundo(TM),
@@ -408,13 +430,7 @@ posicoes_permitidas([X,Y]) :-
     Y > 0 , Y < WS+1.
 	
 	
-pergunta_base(ListaVisitados,Acao) :- 
-einimigo(no,L),
-eteletransporte(no,L),
-epoco(no,L),
-naopertence(L,ListaVisitados),
-atualiza_marioloc(L),
-Action = L.
+
 
 
 naopertence(X,[]).
