@@ -1,14 +1,28 @@
-:- dynamic([mario_location/1,
-loc_powerup/1,
-loc_inimigo/1,
-loc_teletransporte/1,
-loc_ouro/1,
-loc_poco/1,
-energy/1,
+:- dynamic(inicio/2,
+parede/2,
+vazia/2,
+inimigo/2,
+ouro/2,
+power_up/2
+poco/2,
+teletransporte/2,
+inimigo/4,
+energia/1,
 score/1,
-tamanho_mundo/1,
-casas_visitadas/1,
-ourosencontrados/1
+municao/1,
+mario_location/3,
+visitadas/2,
+saida/1,
+caminho/1,
+pode_ter_poco/2,
+pode_ter_teletransporte/2,
+pode_ter_inimigo/2,
+nao_tem_poco/2,
+nao_tem_inimigo/2,
+nao_tem_teletransporte/2,
+tem_poco/2,
+tem_inimigo/2,
+tem_teletransporte/2
 ]).
 
 %% Inicializando o mapa
@@ -214,9 +228,9 @@ loc_powerup([2,11]).
 
 
 %Init
-init_jogo:-
-retractall(mario_location(_,_)),assert(mario_location([1,1])),
-retractall(energy(_)),assert(energy(100)),
+init_jogo_free() :-
+retractall(mario_location(_,_)),
+retractall(energy(_)),
 retractall(score()),assert(score(0)),
 retractall(visitados(_)),assert(visitados(1)),
 retractall(einimigo(_,_)),retractall(eouro(_,_)),
@@ -226,24 +240,30 @@ format("Passou pelo init").
 
 
 
-adjacent( [X1, Y1], [X2, Y2] ) :-
-( X1 = X2, adj( Y1, Y2 )
-; Y1 = Y2, adj( X1, X2 )
-).
+adjacente(X,Y,X2,Y) :- X2 is X + 1,pode_ser_acessada(X2,Y).
+adjacente(X,Y,X2,Y) :- X2 is X - 1,pode_ser_acessada(X2,Y).
+adjacente(X,Y,X,Y2) :- X2 is Y + 1,pode_ser_acessada(X2,Y).
+adjacente(X,Y,X,Y2) :- X2 is Y - 1,pode_ser_acessada(X2,Y).
+
+pode_ser_acessada(X,Y) :- inicio(X,Y);poco(X,Y);vazia(X,Y);ouro(X,Y);teletransporte(X,Y);power_up(X,Y);inimigo(_,_,X,Y),!.
+
+
 mark_visited_position(Position) :-
 	assert(agent_knowledge(Position, visited)).
 
 %Movimento
-dir :- mario_location([X,Y]),X < 12,retractall(mario_location([X,Y])),NX is X+1,assert(mario_location([NX,Y])).
-esq :- mario_location([X,Y]),X > 1,retractall(mario_location([X,Y])),NX is X-1,assert(mario_location([NX,Y])).
-cim :- mario_location([X,Y]),Y < 12,retractall(mario_location([X,Y])),NY is Y+1,assert(mario_location([X,NY])).
-bai :- mario_location([X,Y]),Y > 1,retractall(mario_location([X,Y])),NY is Y-1,assert(mario_location([X,NY])).
- 
-step(mario_location([X,Y]),1) :- format("Entrou aqui"),cim,format("Passou"),,mark_visited_position([X,Y]).
-step(mario_location([X,Y]),2) :- bai,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
-step(mario_location([X,Y]),3) :- dir,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
-step(mario_location([X,Y]),4) :- esq,einimigo(no,[X,Y]),eteletransporte(no,[X,Y]),epoco(no,[X,Y]),mark_visited_position([X,Y]).
+estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao).
 
+mario_andar() :- ((mario_location(_,_,direita),Prox = baixo);(mario_location(_,_,esquerda),Prox = cima);(mario_location(_,_,baixo),Prox = esquerda);(mario_location(_,_,cima),Prox = direita)),ir_Para(Prox);
+
+mario_andar_esquerda :- ((mario_location(_,_,direita),Prox = cima);(mario_location(_,_,esquerda),Prox = baixo);(mario_location(_,_,baixo),Prox = direita);(mario_location(_,_,cima),Prox = esquerda)),ir_Para(Prox);
+
+ir_Para(Prox) :-  mario_location(X,Y,_),retractall(mario_location(X,Y,_)),assert(mario_location(X,Y,Prox)),atualiza_score(-1).
+
+mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 + 1,Y2 = Y,Posicao = direita,!.
+mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 - 1,Y2 = Y,Posicao = esquerda,!.
+mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 - 1,X2 = X,Posicao = cima,!.
+mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 + 1,X2 = X,Posicao = baixo,!.
 %Percepções
 formar_percepcao([_pas,_bris,_flas,_bri]) :- mario_location([X,Y]),ouviu_passos([X,Y]),sentiu_brisa([X,Y]),percebeu_flash([X,Y]),percebeu_brilho([X,Y]).
 
@@ -281,10 +301,10 @@ loc_inimigo(EL),
 loc_powerup(UL),
 update_energy(ML, GL,PL,TL,EL,UL).
 
-update_energy(P) :- energy(E),
-newEnergy is E+P,
-retractall(energy(_)),
-assert(energy(newEnergy)).
+atualiza_energia(P) :- energia(E),
+novaEnergia is E+P,
+retractall(energia(_)),
+assert(energia(novaEnergia)).
 
 
 update_energy(ML,ML,_,_,_,_) :- update_score(1000),update_ouros(1).
@@ -299,10 +319,12 @@ update_energy(ML,_,_,_,_,ML) :- update_energy(20).
 
 update_energy(ML,_,_,ML,_,_) :- random_between(1,12,X),random_between(1,12,Y),retractall(mario_location(_,_)),assert(mario_location([X,Y])).
 
-update_score(N) :- score(S),
-newscore is S+N,
+atualiza_score(N) :- score(S),
+Novoscore is S+N,
 retractall(score(_)),
-assert(score(newscore)).
+assert(score(Novoscore)).
+
+atualiza_municao() :- municao(Municao),NovaMunicao is Municao - 1,retractall(municao(Municao)),assert(municao(NovaMunicao)).
 
 update_ouros(X) :- ourosencontrados(O),
 newO is O+X,
