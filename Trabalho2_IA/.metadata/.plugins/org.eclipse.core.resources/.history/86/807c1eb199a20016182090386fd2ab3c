@@ -1,0 +1,15 @@
+package View;
+
+import javax.swing.*;
+
+public class MapFrame extends JFrame {
+	
+	JPanel panel;
+	
+	public MapFrame() {
+		
+		panel = new Panel();
+		
+	}
+
+}

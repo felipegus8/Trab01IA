@@ -1,0 +1,18 @@
+package View;
+
+import javax.swing.*;
+
+public class MapFrame extends JFrame {
+	
+	JPanel panel;
+	
+	public MapFrame() {
+		
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBounds(0, 0, 300, 300);
+		getContentPane().add(panel);
+		setSize(300, 300);
+	}
+
+}

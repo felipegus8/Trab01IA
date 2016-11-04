@@ -1,0 +1,37 @@
+package Model;
+
+import org.jpl7.Query;
+import org.jpl7.Term;
+import java.util.Map;
+
+public class ConsultProlog {
+
+	public Action getNextMove() {
+		//TO-DO
+		Query q3 = new Query("query do Felipe");
+		Map<String, Term> solution = q3.oneSolution();
+		
+		if(solution == null) {
+			return null;
+		}
+		String action = solution.get("Action").toString();
+		
+		switch(action) {
+			case "rotate":
+				return Action.Virar_a_direita;
+			case "attack":
+				return Action.Atirar;
+			case "walk":
+				return Action.Mover_para_frente;
+			case "pickGold":
+				return Action.Pegar_ouro;
+			case "pickPowerup":
+				return Action.Pegar_powerUp;
+		}
+		
+		return null;
+		
+	}
+	
+
+}

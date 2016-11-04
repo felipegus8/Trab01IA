@@ -1,0 +1,10 @@
+package Model;
+
+import java.util.*;
+
+public class Map {
+	
+	ArrayList<char[]> matrix = new ArrayList<char[]>();
+	
+
+}

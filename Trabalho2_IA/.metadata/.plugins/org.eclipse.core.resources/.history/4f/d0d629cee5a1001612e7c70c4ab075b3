@@ -1,0 +1,15 @@
+package Model;
+
+import java.util.*;
+
+public class Map {
+	
+	protected ArrayList<Character[]> matrix;
+	private static Map map = new Map();
+	
+	public Map() {
+		 matrix = new ArrayList<Character[]>();
+	}
+	
+
+}

@@ -1,0 +1,43 @@
+package Model;
+
+import java.io.*;
+import java.util.*;
+
+public class FileReader {
+	
+	public void leArquivo() throws IOException{
+		try {
+			File file = new File("save.txt");
+			Reader reader = new Reader(file);
+			char[] arrayChar = new char[200];
+			Scanner s = new Scanner(new BufferedReader(reader));
+			String next;
+			int i = 0;
+			while(s.hasNext()) {
+				next = s.next();
+				next.to
+				switch(next) {
+//					case "Vermelho":
+//						equipe = tabuleiro.getEquipes().get(0);
+//						break;
+//					case "Verde":
+//						equipe = tabuleiro.getEquipes().get(1);
+//						break;
+//					case "Amarelo":
+//						equipe = tabuleiro.getEquipes().get(2);
+//						break;
+//					case "Azul":
+//						equipe = tabuleiro.getEquipes().get(3);
+//						break;
+				}
+			}
+			
+			reader.read(arrayChar);
+			
+			
+		} catch(FileNotFoundException e) {
+			
+		}
+	}
+
+}

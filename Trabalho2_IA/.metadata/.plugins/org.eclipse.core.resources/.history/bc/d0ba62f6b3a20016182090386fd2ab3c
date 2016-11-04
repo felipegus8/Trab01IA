@@ -1,0 +1,12 @@
+package Model;
+
+public enum Action
+{
+	
+	Subir,
+	Mover_para_frente,
+	Virar_a_direita,
+	Atirar,
+	Pegar_objeto
+
+}
