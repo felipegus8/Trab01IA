@@ -13,7 +13,7 @@ municao/1,
 mario_location/3,
 visitadas/2,
 saida/1,
-path/1,
+path_atual/1,
 pode_ter_poco/2,
 pode_ter_teletransporte/2,
 pode_ter_inimigo/2,
@@ -297,26 +297,6 @@ pode_ser_acessada(X,Y) :- inicio(X,Y);poco(X,Y);vazia(X,Y);ouro(X,Y);teletranspo
 
 mark_visited_position(Position) :-
 	assert(agent_knowledge(Position, visited)).
-%Preenchendo o Path
-
-tomar_decisao_segura():-visitadas(X,Y),not(percebeu_algum_perigo(X,Y)),not(tem_inimigo(X,Y)),not(tem_teletransporte(X,Y)),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),mario_location(LocX,LocY,_),go([LocX,LocY],[X,Y]),!.
-
-tomar_decisao_inimigo():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),inimigo(_,_,X2,Y2),!.
-
-tomar_decisao_teletransporte():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),teletransporte(X2,Y2),!.
-
-tomar_decisao_powerup():-power_up(X,Y),visitadas(X,Y),mario_location(LocX,LocY,_),not((X = LocX,Y=LocY)),go([LocX,LocY],[X,Y]),!.
-
-tomar_decisao_poco():-mario_location(LocX,LocY,_),pode_ter_poco(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),not((Y2=LocY,X2=LocX)),go([LocX,LocY],[X2,Y2]),!.
-
-%Exceções
-tomar_decisao_voltar_para_mais_proxima:-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),go[X,Y],[X2,Y2],!.
-
-tomar_decisao_saida:-mario_location(X,Y,_),inicio(X2,Y2),go([X,Y],[X2,Y2]),!.
-
-tomar_decisao_lutar:-tem_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY,_),not((Y2=LocY,x2=LocX)),go([LocX,LocY],[X2,Y2]),!.
-
-tomar_decisao_pode_ter_inimigo:-pode_ter_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY),not((X2=LocX,Y2=LocY)),go([LocX,LocY],[X2,Y2]),!.
 
 %Movimento
 estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao).
@@ -331,6 +311,11 @@ mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 + 1,Y2 = Y,Posicao 
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 - 1,Y2 = Y,Posicao = esquerda,!.
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 - 1,X2 = X,Posicao = cima,!.
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),Y is Y2 + 1,X2 = X,Posicao = baixo,!.
+
+mario_andar_para(X,Y):-pode_ser_acessada(X,Y),mario_location(_,_,Posicao),retractall(mario_location(_,_,_)),assert(mario_location(X,Y,Posicao)),(visitadas(X,Y);assert(visitadas(X,Y))),update_score(-1),atualizar_incertezas(),
+    ((poco(X,Y),assert(tem_poco(X,Y)),update_score(-1000),retractall(energia(_)),assert(energia(0)));0=0),
+    ((inimigo(E2,_,X2,Y2),atualiza_energia(-E2),assert(tem_inimigo(X,Y)),retractall(pode_ter_inimigo(X,Y)),atualizar_incertezas(),assert(dijkstra_opcao_permite_perigo(1)),tomar_decisao_voltar_para_mais_proxima(),retractall(dijkstra_opcao_permite_perigo(_)));0=0),!.
+
 %Percepções
 
 ouviu_passos_inimigo(X,Y) :-adjacente(X,Y,X2,Y2),inimigo(_,_,X2,Y2),!.
@@ -496,6 +481,26 @@ posicoes_permitidas([X,Y]) :-
     X > 0, X < WS+1,
     Y > 0 , Y < WS+1.
 
+%Preenchendo o Path
+
+tomar_decisao_segura():-visitadas(X,Y),not(percebeu_algum_perigo(X,Y)),not(tem_inimigo(X,Y)),not(tem_teletransporte(X,Y)),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),mario_location(LocX,LocY,_),go([LocX,LocY],[X,Y]),!.
+
+tomar_decisao_inimigo():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),inimigo(_,_,X2,Y2),!.
+
+tomar_decisao_teletransporte():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),teletransporte(X2,Y2),!.
+
+tomar_decisao_powerup():-power_up(X,Y),visitadas(X,Y),mario_location(LocX,LocY,_),not((X = LocX,Y=LocY)),go([LocX,LocY],[X,Y]),!.
+
+tomar_decisao_poco():-mario_location(LocX,LocY,_),pode_ter_poco(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),not((Y2=LocY,X2=LocX)),go([LocX,LocY],[X2,Y2]),!.
+
+%Exceções
+tomar_decisao_voltar_para_mais_proxima:-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),go[X,Y],[X2,Y2],!.
+
+tomar_decisao_saida:-mario_location(X,Y,_),inicio(X2,Y2),go([X,Y],[X2,Y2]),!.
+
+tomar_decisao_lutar:-tem_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY,_),not((Y2=LocY,x2=LocX)),go([LocX,LocY],[X2,Y2]),!.
+
+tomar_decisao_pode_ter_inimigo:-pode_ter_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY),not((X2=LocX,Y2=LocY)),go([LocX,LocY],[X2,Y2]),!.
 
 %Atirar
 atirar(Resultado_tiro):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),random_between(20,50,Dano),
@@ -511,6 +516,45 @@ atirar(Resultado_tiro):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X
 atualiza_energia(-10),
 atualiza_municao(),!.
 
+%Ações possíveis
+
+proximo_movimento(sair):-mario_location(X,Y,_),inicio(X,Y),saida(1),!.
+
+proximo_movimento(pegar_ouro):-mario_location(X,Y,_),ouro(X,Y),retract(ouro(X,Y)),assert(vazia(X,Y)),atualiza_score(1000),!.
+
+proximo_movimento(morreu):-energia(E),E<1,!.
+
+proximo_movimento(Seguro):-tomar_decisao_segura(),proximo_movimento(Seguro),writef('Indo para uma casa segura'),!.
+
+proximo_movimento(Andar_livremente):-mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebeu_algum_perigo()),not(visitadas(X,Y)),mario_andar_para(X,Y),!.
+
+proximo_movimento(Andar_livremente_rodando):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2),not(mario_vai_para(X2,Y2)),mario_andar(),!.
+
+proximo_movimento(Rodar_se_nao_permitido):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
+
+proximo_movimento(Path):-curPath([]),retract(curPath([])),proximo_movimento(Path),!.
+
+proximo_movimento(Rodar):-curPath([X,Y]|_),not(mario_vai_para(X,Y)),mario_andar(),!.
+
+proximo_movimento(Andar):-curPath([X,Y]|N),mario_vai_para(X,Y),retractall(curPath([])),assert(curPath(N)),mario_andar_para(X,Y),!.
+
+proximo_movimento(Atirar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),mario_vai_para(X2,Y2),energia(E),E>50,writef('Vai atirar'),atirar(Atirar),!.
+
+proximo_movimento(Rodar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),not((mario_vai_para(X2,Y2))),energia(E),E>50,mario_andar(),!.
+
+proximo_movimento(Andar):-municao(M),M>0,tomar_decisao_lutar(),proximo_movimento(Andar),!.
+
+proximo_movimento(Andar_Pode_Ter_Inimigo):-energia(E),E>50,mario_vai_para(X,Y),pode_ter_inimigo(X,Y),mario_andar_para(X,Y),!.
+
+proximo_movimento(Rodar):-energia(E),E>50,mario_location(LocX,LocY,_),adjacente(LocX,LocY,X2,Y2),pode_ter_inimigo(X2,Y2),not(mario_vai_para(X2,Y2)),mario_vai_para().
+
+proximo_movimento(Acao):-energia(E),E>50,tomar_decisao_pode_ter_inimigo(),proximo_movimento(Acao),writef('Andar em direcao ao inimigo'),!.
+
+proximo_movimento(pegar_power_up):-energia(E),mario_location(X,Y,_),power_up(X,Y),retract(power_up(X,Y)),assert(vazia(X,Y)),update_score(-1),update_energy(20),!.
+
+proximo_movimento(Acao):-energia(E),tomar_decisao_powerup(),proximo_movimento(Acao),writef('Pegar power up'),!.
+
+proximo_movimento(Acao):-assert(saida(1)),tomar_decisao_saida(),proximo_movimento(Acao),writef('Vai sair'),!.
 
 
 
