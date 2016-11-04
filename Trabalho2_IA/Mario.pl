@@ -467,14 +467,14 @@ proximo_movimento(Path):-curPath([]),retract(curPath([])),proximo_movimento(Path
 proximo_movimento(Rodar):-curPath([X,Y]|_),not(mario_vai_para(X,Y)),mario_andar(),!.
 
 proximo_movimento(Andar):-curPath([X,Y]|N),mario_vai_para(X,Y),retractall(curPath([])),assert(curPath(N)),mario_andar_para(X,Y),!.
+//
+proximo_movimento(Andar):-mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebeu_algum_perigo()),not(visitadas(X,Y)),mario_andar_para(X,Y),!.
 
-proximo_movimento(Andar_livremente):-mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebeu_algum_perigo()),not(visitadas(X,Y)),mario_andar_para(X,Y),!.
+proximo_movimento(Rodar) :- mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2)),not(mario_vai_para(X2,Y2)),mario_andar(),!.
 
-proximo_movimento(Andar_livremente_rodando) :- mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2)),not(mario_vai_para(X2,Y2)),mario_andar(),!.
+proximo_movimento(Rodar):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
 
-proximo_movimento(Rodar_se_nao_permitido):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
-
-proximo_movimento(Seguro):-format("Chegou 4"),tomar_decisao_segura(),format("Passou"),proximo_movimento(Seguro),writef('Indo para uma casa segura'),!.
+proximo_movimento(Acao):-format("Chegou 4"),tomar_decisao_segura(),format("Passou"),proximo_movimento(Acao),writef('Indo para uma casa segura'),!.
 
 proximo_movimento(Atirar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),mario_vai_para(X2,Y2),energia(E),E>50,writef('Vai atirar'),atirar(Atirar),!.
 
@@ -482,7 +482,7 @@ proximo_movimento(Rodar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,
 
 proximo_movimento(Andar):-municao(M),M>0,tomar_decisao_lutar(),proximo_movimento(Andar),!.
 
-proximo_movimento(Andar_Pode_Ter_Inimigo):-energia(E),E>50,mario_vai_para(X,Y),pode_ter_inimigo(X,Y),mario_andar_para(X,Y),!.
+proximo_movimento(Andar):-energia(E),E>50,mario_vai_para(X,Y),pode_ter_inimigo(X,Y),mario_andar_para(X,Y),!.
 
 proximo_movimento(Rodar):-energia(E),E>50,mario_location(LocX,LocY,_),adjacente(LocX,LocY,X2,Y2),pode_ter_inimigo(X2,Y2),not(mario_vai_para(X2,Y2)),mario_vai_para(),!.
 
