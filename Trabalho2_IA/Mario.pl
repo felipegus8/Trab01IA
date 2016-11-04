@@ -13,7 +13,7 @@ municao/1,
 mario_location/3,
 visitadas/2,
 saida/1,
-caminho/1,
+path/1,
 pode_ter_poco/2,
 pode_ter_teletransporte/2,
 pode_ter_inimigo/2,
@@ -22,7 +22,9 @@ nao_tem_inimigo/2,
 nao_tem_teletransporte/2,
 tem_poco/2,
 tem_inimigo/2,
-tem_teletransporte/2
+tem_teletransporte/2,
+rpath/2,
+dijkstra_opcao_permite_perigo/1
 ]).
 
 %% Inicializando o mapa
@@ -226,6 +228,51 @@ loc_powerup([1,1]).
 loc_powerup([7,6]).
 loc_powerup([2,11]).
 
+%Dijkstra
+
+%Implementação de Dijkstra em prolog retirada de http://rosettacode.org/wiki/Dijkstra's_algorithm#Prolog usando peso 1
+
+path([X, Y],[X2, Y2], 1) :- visited(X, Y), visitados(X2, Y2), adjacente(X, Y, X2, Y2),
+(
+dijkstra_opcao_permite_perigo(1);
+(
+not(pode_ter_inimigo(X2, Y2)), not(pode_ter_teletransporte(X2, Y2)),
+not(pode_ter_teletransporte(X, Y)), not(pode_ter_inimigo(X, Y)),
+not(tem_teletransporte(X2, Y2)), not(tem_inimigo(X, Y)),
+not(tem_inimigo(X2, Y2)), not(tem_teletransporte(X, Y))
+)
+). /* From, To, Weight=1 */
+
+shorterPath([H|Path], Dist) :-
+rpath([H|T], D), !, Dist < D,
+retract(rpath([H|_],_)),
+/*writef('%w is closer than %w\n', [[H|Path], [H|T]]),*/
+assert(rpath([H|Path], Dist)).
+shorterPath(Path, Dist) :-
+/*writef('New path:%w\n', [Path]),*/
+assert(rpath(Path,Dist)).
+
+traverse([X, Y], Path, Dist) :-
+path([X, Y], T, D),
+not(memberchk(T, Path)),
+shorterPath([T,[X, Y]|Path], Dist+D),
+traverse(T,[[X, Y]|Path],Dist+D).
+
+traverse([X, Y]) :-
+retractall(rpath(_,_)),
+traverse([X, Y],[],0).
+traverse(_).
+
+go([X, Y], [X2, Y2]) :-
+traverse([X, Y]),
+rpath([[X2, Y2]|RPath], Dist)->
+reverse([[X2, Y2]|RPath], Path),
+Distance is round(Dist),
+(writef('Shortest path is %w with distance %w = %w\n',
+[Path, Dist, Distance]), Path = [_|T], assert(curPath(T)));
+writef('There is no route from %w to %w\n', [[X, Y], [X2, Y2]]).
+
+
 
 %Init
 init_jogo_free() :-
@@ -250,6 +297,26 @@ pode_ser_acessada(X,Y) :- inicio(X,Y);poco(X,Y);vazia(X,Y);ouro(X,Y);teletranspo
 
 mark_visited_position(Position) :-
 	assert(agent_knowledge(Position, visited)).
+%Preenchendo o Path
+
+tomar_decisao_segura():-visitadas(X,Y),not(percebeu_algum_perigo(X,Y)),not(tem_inimigo(X,Y)),not(tem_teletransporte(X,Y)),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),mario_location(LocX,LocY,_),go([LocX,LocY],[X,Y]),!.
+
+tomar_decisao_inimigo():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),inimigo(_,_,X2,Y2),!.
+
+tomar_decisao_teletransporte():-visitadas(X,Y),adjacente(X,Y,X2,Y2),not(visitadas(X2,Y2)),teletransporte(X2,Y2),!.
+
+tomar_decisao_powerup():-power_up(X,Y),visitadas(X,Y),mario_location(LocX,LocY,_),not((X = LocX,Y=LocY)),go([LocX,LocY],[X,Y]),!.
+
+tomar_decisao_poco():-mario_location(LocX,LocY,_),pode_ter_poco(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),not((Y2=LocY,X2=LocX)),go([LocX,LocY],[X2,Y2]),!.
+
+%Exceções
+tomar_decisao_voltar_para_mais_proxima:-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),go[X,Y],[X2,Y2],!.
+
+tomar_decisao_saida:-mario_location(X,Y,_),inicio(X2,Y2),go([X,Y],[X2,Y2]),!.
+
+tomar_decisao_lutar:-tem_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY,_),not((Y2=LocY,x2=LocX)),go([LocX,LocY],[X2,Y2]),!.
+
+tomar_decisao_pode_ter_inimigo:-pode_ter_inimigo(X,Y),adjacente(X,Y,X2,Y2),visitadas(X2,Y2),mario_location(LocX,LocY),not((X2=LocX,Y2=LocY)),go([LocX,LocY],[X2,Y2]),!.
 
 %Movimento
 estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao).
@@ -428,8 +495,22 @@ posicoes_permitidas([X,Y]) :-
     tamanho_mundo(TM),
     X > 0, X < WS+1,
     Y > 0 , Y < WS+1.
-	
-	
+
+
+%Atirar
+atirar(Resultado_tiro):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),random_between(20,50,Dano),
+(
+    (inimigo(Dano_Inimigo_provoca,Energia_Inimigo,X2,Y2),
+        Energia_Inimigo_apos_dano is Energia_Inimigo - Dano,
+    (
+     (Energia_Inimigo_apos_dano < 1,retractall(inimigo(_,_,X2,Y2)),retractall(tem_inimigo(X2,Y2)),assert(vazia(X2,Y2)),Resultado_tiro = matou,writef('Inimigo morreu'));
+     (retractall(inimigo(_,_,X2,Y2)),assert(inimigo(Dano_Inimigo_provoca,Energia_Inimigo_apos_dano,X2,Y2)),Resultado_tiro = atacou_nao_matou,writef('Inimigo atacado mas não morto'))
+    )
+)
+),
+atualiza_energia(-10),
+atualiza_municao(),!.
+
 
 
 
