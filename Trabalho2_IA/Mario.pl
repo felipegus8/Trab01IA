@@ -556,6 +556,8 @@ proximo_movimento(Acao):-energia(E),tomar_decisao_powerup(),proximo_movimento(Ac
 
 proximo_movimento(Acao):-assert(saida(1)),tomar_decisao_saida(),proximo_movimento(Acao),writef('Vai sair'),!.
 
+%proximo_movimento(Teletransporte):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_teletransporte(X2,Y2),random_between(1,12,XT),random_between(1,12,YT),mario_vai_para(XT,YT),!.
+
 
 
 naopertence(X,[]).
