@@ -490,7 +490,7 @@ proximo_movimento(Andar):-mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebe
 
 proximo_movimento(Rodar) :- mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2)),not(mario_vai_para(X2,Y2)),format("Mandou andar"),mario_andar(),!.
 
-%proximo_movimento(Rodar):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
+proximo_movimento(Rodar):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
 
 proximo_movimento(Acao):-tomar_decisao_segura(),format("Passou"),proximo_movimento(Acao),writef('Indo para uma casa segura'),!.
 
@@ -511,6 +511,12 @@ proximo_movimento(pegar_power_up):-energia(E),mario_location(X,Y,_),power_up(X,Y
 proximo_movimento(Acao):-energia(E),tomar_decisao_powerup(),proximo_movimento(Acao),writef('Pegar power up'),!.
 
 proximo_movimento(Acao):-assert(saida(1)),tomar_decisao_saida(),proximo_movimento(Acao),writef('Vai sair'),!.
+
+proximo_movimento(Andar) :- score(S), S < 1, mario_vai_para(X, Y), pode_ter_poco(X, Y), mario_andar_para(X, Y), writef('Pode cair no poco\n'), !.
+
+proximo_movimento(Rodar) :- score(S), S < 1, mario_location(X, Y, _), adjacente(X, Y, X2, Y2),pode_ter_poco(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar(), writef('Rodando podendo cair no poco!\n'), !.
+
+proximo_movimento(Acao) :- score(S), S < 1, tomar_decisao_poco(), proximo_movimento(Acao), writef('Acao para poder cair no poco!\n'), !.
 
 %proximo_movimento(Teletransporte):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_teletransporte(X2,Y2),random_between(1,12,XT),random_between(1,12,YT),mario_vai_para(XT,YT),!.
 
