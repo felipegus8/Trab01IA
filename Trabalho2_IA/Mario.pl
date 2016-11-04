@@ -224,16 +224,16 @@ pode_ser_acessada(X,Y) :- inicio(X,Y);poco(X,Y);vazia(X,Y);ouro(X,Y);teletranspo
 mario_reset() :- retractall(energia(_)),retractall(score(_)),retractall(municao(_)),retractall(mario_location(_,_,_)),retractall(visitadas(_,_)),retractall(saida(_)),retractall(inicio(StartX,StartY)),
 retractall(dijkstra_opcao_permite_perigo(_)),retractall(curPath(_)),retractall(pode_ter_inimigo(_,_)),retractall(tem_inimigo(_,_)),retractall(nao_tem_inimigo(_,_)),
 retractall(pode_ter_poco(_,_)),retractall(nao_tem_poco(_,_)),retractall(tem_poco(_,_)),retractall(pode_ter_teletransporte(_,_)),retractall(nao_tem_teletransporte(_,_)),retractall(tem_teletransporte(_,_)),
-assert(energia(100)),assert(score(0)),assert(municao(5)),assert(mario_location(1,1,cim)),assert(visitadas(StartX,StartY)).
+assert(energia(100)),assert(score(0)),assert(municao(5)),assert(mario_location(1,1,cima)),assert(visitadas(StartX,StartY)),assert(saida(0)).
 
 %Movimento
-estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao).
+estado_atual_mario(X,Y,Direcao,Score,Energia,Municao) :- mario_location(X,Y,Direcao),score(Score),energia(Energia),municao(Municao),!.
 
 mario_andar() :- ((mario_location(_,_,direita),Prox = baixo);(mario_location(_,_,esquerda),Prox = cima);(mario_location(_,_,baixo),Prox = esquerda);(mario_location(_,_,cima),Prox = direita)),ir_Para(Prox).
 
 mario_andar_esquerda :- ((mario_location(_,_,direita),Prox = cima);(mario_location(_,_,esquerda),Prox = baixo);(mario_location(_,_,baixo),Prox = direita);(mario_location(_,_,cima),Prox = esquerda)),ir_Para(Prox).
 
-ir_Para(Prox) :-  mario_location(X,Y,_),retractall(mario_location(X,Y,_)),assert(mario_location(X,Y,Prox)),atualiza_score(-1).
+ir_Para(Prox) :-  mario_location(X,Y,_),retractall(mario_location(X,Y,_)),assert(mario_location(X,Y,Prox)),atualiza_score(-1),!.
 
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 + 1,Y2 = Y,Posicao = direita,!.
 mario_vai_para(X,Y) :- mario_location(X2,Y2,Posicao),X is X2 - 1,Y2 = Y,Posicao = esquerda,!.
@@ -462,37 +462,37 @@ proximo_movimento(pegar_ouro):-format("Chegou 2"),mario_location(X,Y,_),ouro(X,Y
 
 proximo_movimento(morreu):-format("Chegou 3"),energia(E),E<1,!.
 
-proximo_movimento(Path):-curPath([]),retract(curPath([])),proximo_movimento(Path),!.
+proximo_movimento(Path):-format("Chegou 5"),curPath([]),retract(curPath([])),proximo_movimento(Path),!.
 
-proximo_movimento(Rodar):-curPath([X,Y]|_),not(mario_vai_para(X,Y)),mario_andar(),!.
+proximo_movimento(Rodar):-format("Chegou 6"),curPath([X,Y]|_),not(mario_vai_para(X,Y)),mario_andar(),!.
 
-proximo_movimento(Andar):-curPath([X,Y]|N),mario_vai_para(X,Y),retractall(curPath([])),assert(curPath(N)),mario_andar_para(X,Y),!.
-//
-proximo_movimento(Andar):-mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebeu_algum_perigo()),not(visitadas(X,Y)),mario_andar_para(X,Y),!.
+proximo_movimento(Andar):-format("Chegou 7"),curPath([X,Y]|N),mario_vai_para(X,Y),retractall(curPath([])),assert(curPath(N)),mario_andar_para(X,Y),!.
 
-proximo_movimento(Rodar) :- mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2)),not(mario_vai_para(X2,Y2)),mario_andar(),!.
+proximo_movimento(Andar):-format("Chegou 8"),mario_vai_para(X,Y),pode_ser_acessada(X,Y),not(percebeu_algum_perigo()),not(visitadas(X,Y)),mario_andar_para(X,Y),!.
 
-proximo_movimento(Rodar):-mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
+proximo_movimento(Rodar) :- format("Chegou 9"),mario_location(X,Y,_),adjacente(X,Y,X2,Y2),not(percebeu_algum_perigo()),not(visitadas(X2,Y2)),not(mario_vai_para(X2,Y2)),mario_andar(),!.
 
-proximo_movimento(Acao):-format("Chegou 4"),tomar_decisao_segura(),format("Passou"),proximo_movimento(Acao),writef('Indo para uma casa segura'),!.
+%proximo_movimento(Rodar):-format("Chegou 10"),mario_vai_para(X,Y),not(pode_ser_acessada(X,Y)),mario_andar(),!.
 
-proximo_movimento(Atirar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),mario_vai_para(X2,Y2),energia(E),E>50,writef('Vai atirar'),atirar(Atirar),!.
+proximo_movimento(Acao):-format("Chegou 11"),tomar_decisao_segura(),format("Passou"),proximo_movimento(Acao),writef('Indo para uma casa segura'),!.
 
-proximo_movimento(Rodar):-municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),not((mario_vai_para(X2,Y2))),energia(E),E>50,mario_andar(),!.
+proximo_movimento(Atirar):-format("Chegou 12"),municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),mario_vai_para(X2,Y2),energia(E),E>50,writef('Vai atirar'),atirar(Atirar),!.
 
-proximo_movimento(Andar):-municao(M),M>0,tomar_decisao_lutar(),proximo_movimento(Andar),!.
+proximo_movimento(Rodar):-format("Chegou 13"),municao(M),M>0,mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_inimigo(X2,Y2),not((mario_vai_para(X2,Y2))),energia(E),E>50,mario_andar(),!.
 
-proximo_movimento(Andar):-energia(E),E>50,mario_vai_para(X,Y),pode_ter_inimigo(X,Y),mario_andar_para(X,Y),!.
+proximo_movimento(Andar):-format("Chegou 14"),municao(M),M>0,tomar_decisao_lutar(),proximo_movimento(Andar),!.
 
-proximo_movimento(Rodar):-energia(E),E>50,mario_location(LocX,LocY,_),adjacente(LocX,LocY,X2,Y2),pode_ter_inimigo(X2,Y2),not(mario_vai_para(X2,Y2)),mario_vai_para(),!.
+proximo_movimento(Andar):-format("Chegou 15"),energia(E),E>50,mario_vai_para(X,Y),pode_ter_inimigo(X,Y),mario_andar_para(X,Y),!.
 
-proximo_movimento(Acao):-energia(E),E>50,tomar_decisao_pode_ter_inimigo(),proximo_movimento(Acao),writef('Andar em direcao ao inimigo'),!.
+proximo_movimento(Rodar):-format("Chegou 16"),energia(E),E>50,mario_location(LocX,LocY,_),adjacente(LocX,LocY,X2,Y2),pode_ter_inimigo(X2,Y2),not(mario_vai_para(X2,Y2)),mario_vai_para(),!.
 
-proximo_movimento(pegar_power_up):-energia(E),mario_location(X,Y,_),power_up(X,Y),retract(power_up(X,Y)),assert(vazia(X,Y)),update_score(-1),update_energy(20),!.
+proximo_movimento(Acao):-format("Chegou 17"),energia(E),E>50,tomar_decisao_pode_ter_inimigo(),proximo_movimento(Acao),writef('Andar em direcao ao inimigo'),!.
 
-proximo_movimento(Acao):-energia(E),tomar_decisao_powerup(),proximo_movimento(Acao),writef('Pegar power up'),!.
+proximo_movimento(pegar_power_up):-format("Chegou 18"),energia(E),mario_location(X,Y,_),power_up(X,Y),retract(power_up(X,Y)),assert(vazia(X,Y)),update_score(-1),update_energy(20),!.
 
-proximo_movimento(Acao):-assert(saida(1)),tomar_decisao_saida(),proximo_movimento(Acao),writef('Vai sair'),!.
+proximo_movimento(Acao):-format("Chegou 19"),energia(E),tomar_decisao_powerup(),proximo_movimento(Acao),writef('Pegar power up'),!.
+
+proximo_movimento(Acao):-format("Chegou 20"),assert(saida(1)),tomar_decisao_saida(),proximo_movimento(Acao),writef('Vai sair'),!.
 
 %proximo_movimento(Teletransporte):-mario_location(X,Y,_),adjacente(X,Y,X2,Y2),tem_teletransporte(X2,Y2),random_between(1,12,XT),random_between(1,12,YT),mario_vai_para(XT,YT),!.
 
