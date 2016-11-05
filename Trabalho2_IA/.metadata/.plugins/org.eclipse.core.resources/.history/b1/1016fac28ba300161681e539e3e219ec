@@ -1,0 +1,10 @@
+package Model;
+
+public enum Orientation {
+	
+	up,
+	left,
+	down,
+	right
+	
+}

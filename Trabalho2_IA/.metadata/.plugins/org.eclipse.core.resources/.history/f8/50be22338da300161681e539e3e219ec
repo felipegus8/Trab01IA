@@ -1,0 +1,38 @@
+package Model;
+
+public class Mario {
+	
+	public int x;
+	public int y;
+	public Orientation orientation;
+	public int energy;
+	public int ammo;
+	
+	public Mario() {
+		
+		this.x = 1;
+		this.y = 1;
+		this.orientation = Orientation.up;
+		this.energy = 100;
+		this.ammo = 5;
+	}
+	
+	protected void orientationManager() {
+		
+		switch (orientation) {
+		case up:
+			orientation = Orientation.right;
+			break;
+		case down:
+			orientation = Orientation.left;
+			break;
+		case left:
+			orientation = Orientation.up;
+			break;
+		case right:
+			orientation = Orientation.down;
+			break;
+		}
+	}
+
+}

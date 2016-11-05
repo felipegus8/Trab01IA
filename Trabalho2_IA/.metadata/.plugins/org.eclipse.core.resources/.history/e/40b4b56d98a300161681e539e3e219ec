@@ -1,0 +1,28 @@
+package View;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.io.*;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class MapFrame extends JFrame {
+	
+	private JPanel panel;
+	
+	
+	public MapFrame(ArrayList<Character[]> matrix) {
+		panel = new MapPanel();
+		panel.setLayout(null);
+		panel.setBounds(0, 0, 300, 300);
+		getContentPane().add(panel);
+		setSize(300, 300);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		panel.se 
+	}
+	
+	
+	
+}

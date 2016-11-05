@@ -1,0 +1,8 @@
+package Model;
+
+public class Enemy {
+	public int energy;
+	public EnemyType type;
+	
+	pu
+}

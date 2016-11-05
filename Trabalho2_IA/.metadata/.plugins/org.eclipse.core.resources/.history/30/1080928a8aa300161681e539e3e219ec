@@ -1,0 +1,42 @@
+package Controller;
+
+
+import javax.swing.Timer;
+
+import Model.ConsultProlog;
+import Model.TxtReader;
+import View.MapFrame;
+
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.awt.event.ActionEvent;
+
+public class MarioController {
+	
+	private Timer timer;
+	private ActionListener timerAction;
+	private ConsultProlog consulter;
+	private MapFrame view;
+	
+	public MarioController() {
+		
+		consulter = new ConsultProlog();
+		try {
+			view = new MapFrame(TxtReader.leArquivo());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		timerAction = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		
+		timer = new Timer(500, timerAction);
+	}
+	
+}

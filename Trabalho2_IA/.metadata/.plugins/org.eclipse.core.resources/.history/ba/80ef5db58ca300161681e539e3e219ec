@@ -1,0 +1,30 @@
+package Model;
+
+public class Mario {
+	
+	public int x;
+	public int y;
+	public Orientation orientation;
+	public int energy;
+	public int ammo;
+	
+	protected void orientationManager() {
+		switch (orientation) {
+		case up:
+			orientation = Orientation.right;
+			break;
+		case down:
+			orientation = Orientation.left;
+			break;
+		case left:
+			orientation = Orientation.up;
+			break;
+		case right:
+			orientation = Orientation.down;
+			break;
+		default:
+			break;
+		}
+	}
+
+}

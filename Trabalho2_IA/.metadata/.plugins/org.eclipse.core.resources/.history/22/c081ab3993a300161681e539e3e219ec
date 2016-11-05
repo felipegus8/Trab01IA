@@ -1,0 +1,45 @@
+package Model;
+
+import java.util.*;
+
+public class Map {
+	
+	public ArrayList<Character[]> matrix;
+	public ArrayList<Enemy> enemyList;
+	public HashMap<int[], Enemy> enemies;
+			
+	private static Map map = new Map();
+	
+	private Map() {
+		 matrix = new ArrayList<Character[]>();
+		 enemies = new HashMap<int[], Enemy>();
+	}
+	
+	public static Map getSingleton() {
+		return map;
+	}
+	
+	protected void addEnemy(char c, int x, int y) {
+		int [] coordinates = {x, y};
+		EnemyType et;
+		switch (c) {
+		case'T':
+			et = EnemyType.Teletransporte;
+			enemies.put(coordinates,
+						new Enemy(EnemyType.Teletransporte, x, y));
+			break;
+		case'D':
+			enemies.put(coordinates,
+						new Enemy(EnemyType.Teletransporte, x, y));
+			break;
+		case'd':
+			
+			break;
+		default:
+			System.out.println("Caracter desconhecido");
+			break;
+		}
+		
+	}
+
+}

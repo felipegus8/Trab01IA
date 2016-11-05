@@ -1,0 +1,47 @@
+package Model;
+
+import java.util.*;
+
+public class MapModel {
+	
+	protected ArrayList<Character[]> matrix;
+	protected HashMap<int[], Enemy> enemies;
+			
+	private static MapModel mapModel = new MapModel();
+	
+	private MapModel() {
+		 matrix = new ArrayList<Character[]>();
+		 enemies = new HashMap<int[], Enemy>();
+	}
+	
+	public static MapModel getSingleton() {
+		return mapModel;
+	}
+	
+	protected void addEnemy(char c, int x, int y) {
+		int [] coordinates = {x, y};
+		EnemyType et;
+		switch (c) {
+		case'T':
+			et = EnemyType.Teletransporte;
+			break;
+		case'D':
+			et = EnemyType.dano_Maior;
+			break;
+		default:
+			et = EnemyType.dano_Menor;
+			break;
+		}
+		enemies.put(coordinates,
+				new Enemy(et, x, y));
+	}
+	
+	public void setMatrix(ArrayList<Character[]> matrix) {
+		this.matrix = matrix;
+	}
+	
+	public ArrayList<Character[]> getMatrix() {
+		return this.matrix;
+	}
+
+}

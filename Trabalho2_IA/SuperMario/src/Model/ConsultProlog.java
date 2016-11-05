@@ -5,40 +5,54 @@ import java.util.Map;
 
 public class ConsultProlog {
 	
-	private static Query q1 = new Query("consult", new Term[] {new Atom("src/logic/main.pl")});
+	private static Query q1 = new Query("consult", new Term[] {new Atom("Resources/Mario.pl")});
 	
 	public ConsultProlog() {
 		System.out.println( "consult " + (q1.hasSolution() ? "succeeded" : "failed"));
 	}
 
-	public Action getNextMove() {
-		//TO-DO
+	public void getNextMove(Mario mario) {
+
 		Query q3 = new Query("proximo_movimento(Mov).");
 		Map<String, Term> solution = q3.oneSolution();
 		
 		if(solution == null) {
-			return null;
+			return;
 		}
 		String action = solution.get("Action").toString();
 		
 		switch(action) {
 			case "Rodar":
-				return Action.Virar_a_direita;
+				mario.orientationManager();
+				break;
 			case "atacou_não_matou":
-				return Action.Atirar;
+				mario.ataca();
+				break;
 			case "Andar":
-				return Action.Mover_para_frente;
+				mario.andar();
+				break;
 			case "pegar_ouro":
-				return Action.Pegar_ouro;
+				mario.pegar(1000);
+				break;
 			case "pegar_power_up":
-				return Action.Pegar_powerUp;
+				mario.pegar(20);
+				break;
 			case "morreu":
-				return Action.Matar;
+				System.out.println("BUSTED");
+				System.exit(1);
+			case "matou":
+				mario.matar();
+				break;
 			case "sair":
-				return Action.Sair;
+				System.out.println("GANHOU");
+				System.out.println(mario.energy);
+				System.exit(1);
+			default:
+				System.out.println("ACTION INVALIDA");
+				System.out.println(action);
+				System.exit(1);
 		}
 		
-		return null;
 		
 	}
 	

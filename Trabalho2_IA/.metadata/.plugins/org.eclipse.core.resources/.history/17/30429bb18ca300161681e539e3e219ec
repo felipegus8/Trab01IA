@@ -1,0 +1,11 @@
+package Model;
+
+public class Mario {
+	
+	public int x;
+	public int y;
+	public Orientation orientation;
+	public int energy;
+	public int ammo;
+
+}

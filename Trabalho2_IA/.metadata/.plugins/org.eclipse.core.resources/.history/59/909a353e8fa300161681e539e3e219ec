@@ -1,0 +1,7 @@
+package Model;
+
+public enum EnemyTyoe {
+	dano_Menor,
+	dano_Maior,
+	Teletransporte
+}

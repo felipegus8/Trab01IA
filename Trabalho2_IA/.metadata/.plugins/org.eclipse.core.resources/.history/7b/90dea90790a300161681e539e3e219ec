@@ -1,0 +1,10 @@
+package Model;
+
+public class Enemy {
+	public int energy;
+	public EnemyType type;
+	
+	public Enemy(EnemyType type) {
+		this.type = type;
+	}
+}

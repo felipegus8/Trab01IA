@@ -10,60 +10,24 @@ import javax.swing.*;
 
 public class MapFrame extends JFrame {
 	
-	private JPanel panel;
-	private BufferedImage tile;
-	
-	public MapFrame(ArrayList<Character[]> matrix) {
-		panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBounds(0, 0, 300, 300);
+	private MapPanel panel;
+
+	public MapFrame(ArrayList<Character[]> matrix, int x, int y) {
+		panel = new MapPanel();
 		getContentPane().add(panel);
 		setSize(300, 300);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		criaMapa(matrix); 
+		setTitle("Mario");
+		setVisible(true);
+		panel.setInfo(matrix, x, y); 
 	}
 	
-	private void criaMapa(ArrayList<Character[]> matrix) {
-		for (Iterator iterator = matrix.iterator(); iterator.hasNext();) {
-			Character[] c = (Character[]) iterator.next();
-			for (Character character : c) {
-				switch (character) {
-				case'U':
-					criaTerreno("powerUp.jpg");
-					break;
-				case'.':
-					criaTerreno("default.jpg");
-					break;
-				case'P':
-					criaTerreno("hole.jpg");
-					break;
-				case'T':
-					criaTerreno("teletransport.jpg");
-					break;
-				case'D':
-					criaTerreno("bigEnemy.jpg");
-					break;
-				case'O':
-					criaTerreno("gold.jpg");
-					break;
-				case'd':
-					criaTerreno("littleEnemy.jpg");
-					break;
-				default:
-					System.out.println("Caracter desconhecido");
-					break;
-				}
-			}
-		}	
+	public void repaintPanel(ArrayList<Character[]> matrix, int x, int y) {
+		panel.setInfo(matrix, x, y);
+		panel.validate();
+		panel.repaint();
 	}
 	
-	private void criaTerreno(String s) {	
-		try {
-			tile = ImageIO.read(new File("Images/"+s));
-		} catch(IOException e) {
-			System.out.println(e.getMessage());
-			System.exit(1);
-		}
-	}
+	
 	
 }

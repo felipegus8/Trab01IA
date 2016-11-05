@@ -1,0 +1,29 @@
+package Model;
+
+public class Enemy {
+	
+	private int energy;
+	private EnemyType type;
+	private int x;
+	private int y;
+	
+	public Enemy(EnemyType type) {
+		this.type = type;
+		this.energy = 100;
+	}
+	
+	protected int attack() {
+		
+		switch (type) {
+		case dano_Maior:
+			return 50;
+		case dano_Menor:
+			return 20;
+		case Teletransporte:
+			return 0;
+		}
+		
+		return -1;
+		
+	}
+}

@@ -1,0 +1,40 @@
+package Model;
+
+import org.jpl7.*;
+import java.util.Map;
+
+public class ConsultProlog {
+	
+	private static Query q1 = new Query("consult", new Term[] {new Atom("src/logic/main.pl")});
+	
+	public ConsultProlog() {
+		System.out.println( "consult " + (q1.hasSolution() ? "succeeded" : "failed"));
+	}
+
+	public void getNextMove(Mario mario) {
+
+		Query q3 = new Query("proximo_movimento(Mov).");
+		Map<String, Term> solution = q3.oneSolution();
+		
+		if(solution == null) {
+			return null;
+		}
+		String action = solution.get("Action").toString();
+		
+		switch(action) {
+			case "Rodar":
+				mario.orientationManager();
+			case "atacou_não_matou":
+			case "Andar":
+			case "pegar_ouro":
+			case "pegar_power_up":
+			case "morreu":
+			case "sair":
+		}
+		
+		return null;
+		
+	}
+	
+
+}
