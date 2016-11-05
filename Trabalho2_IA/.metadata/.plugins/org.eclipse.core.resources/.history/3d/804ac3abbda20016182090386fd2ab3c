@@ -2,10 +2,9 @@ package Model;
 
 public class Mario {
 	
-	public int x;
-	public int y;
 	public String orientation;
 	public int energy;
+	public int cost;
 	public int ammo;
 
 }

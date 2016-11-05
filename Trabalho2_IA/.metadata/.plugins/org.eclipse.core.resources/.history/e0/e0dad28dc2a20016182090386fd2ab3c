@@ -9,6 +9,7 @@ public enum Action {
 	Atirar,
 	Morreu,
 	Matar,
+	Subir,
 	Sair
 	
 }

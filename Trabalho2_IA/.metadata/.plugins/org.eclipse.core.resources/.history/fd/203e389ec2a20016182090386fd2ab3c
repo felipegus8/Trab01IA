@@ -35,7 +35,7 @@ public class ConsultProlog {
 			case "morreu":
 				return Action.Matar;
 			case "sair":
-				return Action.Sair;
+				return Action.Sair
 		}
 		
 		return null;

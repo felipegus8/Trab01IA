@@ -13,7 +13,7 @@ public class ConsultProlog {
 
 	public Action getNextMove() {
 		//TO-DO
-		Query q3 = new Query("proximo_movimento(Mov).");
+		Query q3 = new Query("query do Felipe");
 		Map<String, Term> solution = q3.oneSolution();
 		
 		if(solution == null) {
@@ -22,20 +22,16 @@ public class ConsultProlog {
 		String action = solution.get("Action").toString();
 		
 		switch(action) {
-			case "Rodar":
+			case "rotate":
 				return Action.Virar_a_direita;
-			case "atacou_não_matou":
+			case "attack":
 				return Action.Atirar;
-			case "Andar":
+			case "walk":
 				return Action.Mover_para_frente;
-			case "pegar_ouro":
+			case "pickGold":
 				return Action.Pegar_ouro;
-			case "pegar_power_up":
+			case "pickPowerup":
 				return Action.Pegar_powerUp;
-			case "morreu":
-				return Action.Matar;
-			case "sair":
-				return Action.Sair;
 		}
 		
 		return null;

@@ -8,7 +8,7 @@ public enum Action {
 	Pegar_ouro,
 	Atirar,
 	Morreu,
-	Matar,
+	Subir,
 	Sair
 	
 }
