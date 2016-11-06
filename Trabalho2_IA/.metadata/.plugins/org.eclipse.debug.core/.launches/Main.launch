@@ -6,6 +6,11 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="PATH" value="/Applications/SWI-Prolog.app/Contents/swipl/lib;${env_var:PATH}&#10;"/>
+</mapAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="Controller.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="SuperMario"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.library.path=/Applications/SWI-Prolog.app/Contents/swipl/lib"/>
 </launchConfiguration>
