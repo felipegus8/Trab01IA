@@ -22,13 +22,13 @@ public class ConsultProlog {
 		String action = solution.get("Action").toString();
 		
 		switch(action) {
-			case "Rodar":
+			case "rodar":
 				mario.orientationManager();
 				break;
 			case "atacou_não_matou":
 				mario.ataca();
 				break;
-			case "Andar":
+			case "andar":
 				mario.andar();
 				break;
 			case "pegar_ouro":
