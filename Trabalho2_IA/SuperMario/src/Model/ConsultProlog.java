@@ -19,7 +19,7 @@ public class ConsultProlog {
 //		Query q3 = new Query("proximo_movimento(Acao).");
 		
 		Map<String, Term> esvaziarMapa = fazQuery("mario_esvaziamapa().");
-		Query consultaMapa = new Query("consult", new Term[] {new Atom("Resources/map.pl")});
+		Query consultaMapa = new Query("consult", new Term[] {new Atom("map.pl")});
 		
 		if(!consultaMapa.hasSolution()) {
 			return;
