@@ -20,6 +20,12 @@ public class ConsultProlog {
         }
         
         Map<String, Term> reset = fazQuery("mario_reset().");
+        
+        if(esvaziarMapa == null ||reset == null)
+        {
+            System.out.println("NULL");
+            return;
+        }
 //		System.out.println( "consult " + (q2.hasSolution() ? "succeeded" : "failed"));
 	}
 
@@ -31,7 +37,7 @@ public class ConsultProlog {
 		
 		Map<String, Term> solution = fazQuery("proximo_movimento(Acao).");
 		
-		if(solution == null || reset == null || esvaziarMapa == null) {
+		if(solution == null) {
 			System.out.println("NULL");
 			return;
 		}
