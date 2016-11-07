@@ -11,6 +11,15 @@ public class ConsultProlog {
 	
 	public ConsultProlog() {
 		System.out.println( "consult " + (q1.hasSolution() ? "succeeded" : "failed"));
+        
+        Map<String, Term> esvaziarMapa = fazQuery("mario_esvaziamapa().");
+        Query consultaMapa = new Query("consult", new Term[] {new Atom("map.pl")});
+        
+        if(!consultaMapa.hasSolution()) {
+            return;
+        }
+        
+        Map<String, Term> reset = fazQuery("mario_reset().");
 //		System.out.println( "consult " + (q2.hasSolution() ? "succeeded" : "failed"));
 	}
 
@@ -18,14 +27,7 @@ public class ConsultProlog {
 
 //		Query q3 = new Query("proximo_movimento(Acao).");
 		
-		Map<String, Term> esvaziarMapa = fazQuery("mario_esvaziamapa().");
-		Query consultaMapa = new Query("consult", new Term[] {new Atom("map.pl")});
 		
-		if(!consultaMapa.hasSolution()) {
-			return;
-		}
-		
-		Map<String, Term> reset = fazQuery("mario_reset().");
 		
 		Map<String, Term> solution = fazQuery("proximo_movimento(Acao).");
 		
