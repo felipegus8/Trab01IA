@@ -34,12 +34,7 @@ public class ConsultProlog {
 //		Query q3 = new Query("proximo_movimento(Acao).");
 		
 		Map<String, Term> s = fazQuery("estado_atual_mario(X,Y,Direcao,Score,Energia,Municao)");
-		System.out.println(s.get("X").toString());
-		System.out.println(s.get("Y").toString());
-		System.out.println(s.get("Direcao").toString());
-		System.out.println(s.get("Score").toString());
-		System.out.println(s.get("Energia").toString());
-		System.out.println(s.get("Municao").toString());
+		System.out.println(s);
 		
 		Map<String, Term> solution = fazQuery("proximo_movimento(Acao).");
 		

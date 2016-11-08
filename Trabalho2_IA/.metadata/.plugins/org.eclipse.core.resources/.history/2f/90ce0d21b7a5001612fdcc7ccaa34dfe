@@ -40,7 +40,6 @@ public class ConsultProlog {
 		System.out.println(s.get("Score").toString());
 		System.out.println(s.get("Energia").toString());
 		System.out.println(s.get("Municao").toString());
-		
 		Map<String, Term> solution = fazQuery("proximo_movimento(Acao).");
 		
 		if(solution == null) {
