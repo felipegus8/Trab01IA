@@ -1,3 +1,4 @@
+
 :- dynamic inicio/2.
 :- dynamic  parede/2.
 :- dynamic  vazia/2.
@@ -96,7 +97,7 @@ mario_andar_para(X, Y) :- pode_ser_acessada(X, Y), mario_location(_, _, Position
                       atualizar_score(-1),
                       atualizar_incertezas(),
                       ((poco(X, Y), assert(tem_poco(X, Y)), atualizar_score(-1000), E is 0, retractall(energia(_)), assert(energia(E)));1=1),
-                      ((inimigo(EE,_, X, Y), writef('Walked into enemy :(\n'), atualiza_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
+                      ((inimigo(EE,_, X, Y), writef('Encontrou o inimigo :(\n'), atualizar_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
 
 					  
 %Dijkstra
@@ -308,7 +309,7 @@ tomar_decisao_pode_cair_poco() :- mario_location(CurX, CurY, _), pode_ter_poco(X
 							visitadas(X2, Y2), not((X2 = CurX, Y2 = CurY)), go([CurX, CurY], [X2, Y2]), !.
 							
 tomar_decisao_voltar_visitadas() :- mario_location(X, Y, _), adjacente(X, Y, X2, Y2), visitadas(X2, Y2),
-								  go([X, Y], [X2, Y2]), writef('Will run away from enemy\n'), !.
+								  go([X, Y], [X2, Y2]), writef('Vai fugir do inimigo\n'), !.
 							
 tomar_decisao_sair() :- mario_location(X, Y, _), inicio(X2, Y2), go([X, Y], [X2, Y2]), !.
 
@@ -376,7 +377,7 @@ proximo_movimento(andar) :- energia(E), E > 50, mario_vai_para(X, Y), pode_ter_i
 					 mario_andar_para(X, Y), !.
 
 proximo_movimento(girar) :- energia(E), E > 50, mario_location(CurX, CurY, _), adjacente(CurX, CurY, X2, Y2),
-					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar().
+					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar(),!.
 					   	 
 proximo_movimento(Acao) :- energia(E), E > 50, tomar_decisao_pode_encontrar_inimigo(), proximo_movimento(Acao), !.
 					   

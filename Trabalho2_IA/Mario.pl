@@ -1,3 +1,4 @@
+
 :- dynamic inicio/2.
 :- dynamic  parede/2.
 :- dynamic  vazia/2.
@@ -58,14 +59,14 @@ mario_reset() :- retractall(energia(_)), retractall(score(_)), retractall(munica
 atualizar_energia(P) :- energia(E),
 novaEnergia is E+P,
 retractall(energia(_)),
-assert(energia(novaEnergia)).
+assert(energia(novaEnergia)),!.
 
 atualizar_score(N) :- score(S),
 Novoscore is S+N,
 retractall(score(_)),
-assert(score(Novoscore)).
+assert(score(Novoscore)),!.
 
-atualizar_municao() :- municao(Municao),NovaMunicao is Municao - 1,retractall(municao(Municao)),assert(municao(NovaMunicao)).
+atualizar_municao() :- municao(Municao),NovaMunicao is Municao - 1,retractall(municao(Municao)),assert(municao(NovaMunicao)),!.
 
 %Movimento
 
@@ -96,7 +97,7 @@ mario_andar_para(X, Y) :- pode_ser_acessada(X, Y), mario_location(_, _, Position
                       atualizar_score(-1),
                       atualizar_incertezas(),
                       ((poco(X, Y), assert(tem_poco(X, Y)), atualizar_score(-1000), E is 0, retractall(energia(_)), assert(energia(E)));1=1),
-                      ((inimigo(EE,_, X, Y), writef('Walked into enemy :(\n'), atualiza_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
+                      ((inimigo(EE,_, X, Y), writef('Encontrou inimigo :(\n'), atualizar_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
 
 					  
 %Dijkstra
@@ -153,10 +154,10 @@ sentiu_brisa_poco() :- mario_location(X,Y,_),sentiu_brisa_poco(X,Y),!.
 percebeu_flash_teletransporte(X,Y) :- adjacente(X,Y,X2,Y2),teletransporte(X2,Y2),!.
 percebeu_flash_teletransporte() :- mario_location(X,Y,_),percebeu_flash_teletransporte(X,Y),!.
 
-percebeu_algum_perigo(X,Y):- (ouviu_passos_inimigo(X,Y);sentiu_brisa_poco(X,Y);percebeu_flash_teletransporte(X,Y)).
-percebeu_algum_perigo() :- mario_location(X,Y,_),percebeu_algum_perigo(X,Y).
+percebeu_algum_perigo(X,Y):- (ouviu_passos_inimigo(X,Y);sentiu_brisa_poco(X,Y);percebeu_flash_teletransporte(X,Y)),!.
+percebeu_algum_perigo() :- mario_location(X,Y,_),percebeu_algum_perigo(X,Y),!.
 
-percebeu_brilho([X1,Y1]) :- loc_ouro([X2.Y2]),X1 = X2,Y1 = Y2.
+percebeu_brilho([X1,Y1]) :- loc_ouro([X2.Y2]),X1 = X2,Y1 = Y2,!.
 
 %Base de conhecimento
 
@@ -376,7 +377,7 @@ proximo_movimento(andar) :- energia(E), E > 50, mario_vai_para(X, Y), pode_ter_i
 					 mario_andar_para(X, Y), !.
 
 proximo_movimento(girar) :- energia(E), E > 50, mario_location(CurX, CurY, _), adjacente(CurX, CurY, X2, Y2),
-					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar().
+					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar(),!.
 					   	 
 proximo_movimento(Acao) :- energia(E), E > 50, tomar_decisao_pode_encontrar_inimigo(), proximo_movimento(Acao), !.
 					   
