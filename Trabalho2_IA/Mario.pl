@@ -59,14 +59,14 @@ mario_reset() :- retractall(energia(_)), retractall(score(_)), retractall(munica
 atualizar_energia(P) :- energia(E),
 novaEnergia is E+P,
 retractall(energia(_)),
-assert(energia(novaEnergia)).
+assert(energia(novaEnergia)),!.
 
 atualizar_score(N) :- score(S),
 Novoscore is S+N,
 retractall(score(_)),
-assert(score(Novoscore)).
+assert(score(Novoscore)),!.
 
-atualizar_municao() :- municao(Municao),NovaMunicao is Municao - 1,retractall(municao(Municao)),assert(municao(NovaMunicao)).
+atualizar_municao() :- municao(Municao),NovaMunicao is Municao - 1,retractall(municao(Municao)),assert(municao(NovaMunicao)),!.
 
 %Movimento
 
@@ -97,7 +97,7 @@ mario_andar_para(X, Y) :- pode_ser_acessada(X, Y), mario_location(_, _, Position
                       atualizar_score(-1),
                       atualizar_incertezas(),
                       ((poco(X, Y), assert(tem_poco(X, Y)), atualizar_score(-1000), E is 0, retractall(energia(_)), assert(energia(E)));1=1),
-                      ((inimigo(EE,_, X, Y), writef('Walked into enemy :(\n'), atualizar_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
+                      ((inimigo(EE,_, X, Y), writef('Encontrou inimigo :(\n'), atualizar_energia(-EE), assert(tem_inimigo(X, Y)), retractall(pode_ter_inimigo(X, Y)), atualizar_incertezas(), assert(dijkstra_opcao_permite_perigo(1)), tomar_decisao_voltar_visitadas(), retractall(dijkstra_opcao_permite_perigo(_)));1=1), !.
 
 					  
 %Dijkstra

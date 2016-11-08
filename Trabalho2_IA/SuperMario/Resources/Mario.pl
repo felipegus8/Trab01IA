@@ -377,7 +377,7 @@ proximo_movimento(andar) :- energia(E), E > 50, mario_vai_para(X, Y), pode_ter_i
 					 mario_andar_para(X, Y), !.
 
 proximo_movimento(girar) :- energia(E), E > 50, mario_location(CurX, CurY, _), adjacente(CurX, CurY, X2, Y2),
-					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar().
+					   pode_ter_inimigo(X2, Y2), not(mario_vai_para(X2, Y2)), mario_andar(),!.
 					   	 
 proximo_movimento(Acao) :- energia(E), E > 50, tomar_decisao_pode_encontrar_inimigo(), proximo_movimento(Acao), !.
 					   
