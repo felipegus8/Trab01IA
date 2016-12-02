@@ -139,7 +139,7 @@ public class ArffWriterOne {
 			System.out.println(e.getMessage());
 		}
 		
-		content += ",";
+//		content += ",";
 		
 		return content;
 	}
