@@ -36,10 +36,10 @@ public class ArffWriterOne {
 			File arffOne = new File(path + "/teste.arff");
 			writer = new FileWriter(arffOne);
 			
-			writer.write("@relation Movies/n");
-			writer.write("@attribute frase string/n");
-			writer.write("@attribute PouN {P,N}/n");
-			writer.write("@data/n");
+			writer.write("@relation Movies\n");
+			writer.write("@attribute frase string\n");
+			writer.write("@attribute PouN {P,N}\n");
+			writer.write("@data\n");
 			
 			String[] paths = {"/part1/pos", "/part1/neg", "/part2/pos", "/part2/neg"};
 			String frase = "";
