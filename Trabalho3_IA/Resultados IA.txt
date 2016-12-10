@@ -1,4 +1,4 @@
-Teste 1 com KNN:(K =3)
+﻿Teste 1 com KNN:(K =3)
 
 IB1 instance-based classifier
 using 3 nearest neighbour(s) for classification
@@ -219,28 +219,30 @@ Weighted Avg.    0,717    0,283    0,719      0,717    0,717      0,436    0,784
  19021  5979 |     a = P
   8167 16830 |     b = N
   
-Teste com Bayes Net:
+Teste com Multilayer Perceptron:(Rede neural)
+Time taken to build model: 933.45 seconds
+
 === Stratified cross-validation ===
 === Summary ===
 
-Correctly Classified Instances       36391               72.7864 %
-Incorrectly Classified Instances     13606               27.2136 %
-Kappa statistic                          0.4557
+Correctly Classified Instances       35135               70.2742 %
+Incorrectly Classified Instances     14862               29.7258 %
+Kappa statistic                          0.4055
 Mean absolute error                      0.3391
-Root mean squared error                  0.4184
-Relative absolute error                 67.8107 %
-Root relative squared error             83.6875 %
+Root mean squared error                  0.4541
+Relative absolute error                 67.8259 %
+Root relative squared error             90.8143 %
 Total Number of Instances            49997     
 
 === Detailed Accuracy By Class ===
 
                  TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
-                 0,779    0,324    0,707      0,779    0,741      0,458    0,815     0,805     P
-                 0,676    0,221    0,754      0,676    0,713      0,458    0,815     0,821     N
-Weighted Avg.    0,728    0,272    0,730      0,728    0,727      0,458    0,815     0,813     
+                 0,740    0,334    0,689      0,740    0,713      0,407    0,772     0,747     P
+                 0,666    0,260    0,719      0,666    0,691      0,407    0,772     0,786     N
+Weighted Avg.    0,703    0,297    0,704      0,703    0,702      0,407    0,772     0,767     
 
 === Confusion Matrix ===
 
      a     b   <-- classified as
- 19484  5516 |     a = P
-  8090 16907 |     b = N
+ 18499  6501 |     a = P
+  8361 16636 |     b = N
