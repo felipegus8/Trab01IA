@@ -1,0 +1,5 @@
+package INF1771_GameAI;
+
+public enum Estado {
+
+}
