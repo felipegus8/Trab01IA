@@ -138,6 +138,8 @@ public class GameAI {
             	this.estado = null;
             } else if(s.equals("hit")) {
             	this.estado = Estado.FUGIR;
+            } else {
+                this.estado = null;
             }
         }
     }
