@@ -12,6 +12,9 @@ public class GameAI {
     long score = 0;
     int energy = 0;
     int i = 0;
+    int j = 0;
+    int k = 0;
+    int camper = 0;
 
     
     /**
@@ -120,26 +123,33 @@ public class GameAI {
         for (String s : o) {
         	System.out.println(s);
         	
-            if(s.equals("blocked")){
-            	this.estado = Estado.VOLTAR;
-            } else if(s.equals("steps")){
-            	this.estado = Estado.ATIRAR;
+           if(s.equals("steps")){
+            	this.estado = Estado.ENEMY;
             } else if(s.equals("breeze")){
             	this.estado = Estado.VOLTAR;
             } else if(s.equals("flash")){
-            	this.estado = Estado.VOLTAR;
-            } else if(s.equals("blueLight")){
-            	this.estado = Estado.PEGAR_POCAO;
+            	this.estado = Estado.FLASH;
             } else if(s.equals("redLight")){
+            	System.out.println("entrei no pegar pocao\n");
+            	this.estado = Estado.PEGAR_POCAO;
+            } else if(s.equals("blueLight")){
+            	System.out.println("entrei no pegar\n");
             	this.estado = Estado.PEGAR_OURO;
             } else if(s.equals("greenLight")){
             	this.estado = null;
             } else if(s.equals("weakLight")){
             	this.estado = null;
-            } else if(s.equals("hit")) {
+            } else if(s.equals("damage")) {
             	this.estado = Estado.FUGIR;
+            } else if(s.equals("hit")) {
+            	this.estado = Estado.HIT;
+            } else if(s.equals("blocked")) {
+            	this.estado = Estado.BLOCKED;
+            } else if(s.contains("enemy")) {
+            	this.estado = Estado.ENEMY;
             } else {
-                this.estado = null;
+            	System.out.println("entrei no limbo\n");
+            	this.estado = null;
             }
         }
     }
@@ -156,25 +166,76 @@ public class GameAI {
      * @return command string to new decision
      */
     public String GetDecision() {
+    	System.out.println("Estado: " + estado);
     	if(estado == null) {
-    		return "andar";
+    		if(j == 0) {
+    			System.out.println("Valor de j" + j);
+    			j++;
+    			return "virar_direita";
+    		}
+	    	return "andar";
+    	} else {
+    		j = 0;
     	}
     	
     	if(estado != Estado.FUGIR) {
     		i = 0;
     	}
     	
+    	if(estado != Estado.ENEMY && estado != Estado.HIT) {
+    		k = 0;
+    	}
+    	
+    	if(estado != Estado.CAMPERMALDITO) {
+    		camper = -1;
+    	}
+    	
     	switch(estado) {
     	case PEGAR_OURO:
+    		
+    		System.out.println("to pegando ouro\n");
+    		estado = Estado.CAMPERMALDITO;
     		return "pegar_ouro";
     		
+    	case CAMPERMALDITO:
+    		camper++;
+    		System.out.println("camper "+camper);
+    		if(camper == 0) {
+    			return "atacar";
+    		} else if(camper == 1) {
+    			camper = -1;
+    			return "virar_direita";
+    		}
+    		
     	case PEGAR_POCAO:
-    		return "pegar_powerup";
+    		estado = null;
+    		System.out.println("pocao " + energy);
+    		if(energy<50) {
+    			return "pegar_powerup";
+    		}
     	
     	case PEGAR_ANEL:
+    		estado = null;
     		return "pegar_anel";
     		
-    	case ATIRAR:
+    	case ENEMY:
+    		if(k == 1) {
+    			k++;
+    			return "virar_direita";
+    		} else if(k == 2) {
+    			k++;
+    			return "atirar";
+    		} else if (k == 3) {
+    			return "andar";
+    		} else {
+    			k = 1;
+    		}
+    		return "atacar";
+    	case HIT:
+    		if(k>9) {
+    			return "andar";
+    		}
+    		k++;
     		return "atacar";
     			
     	case FUGIR:
@@ -194,9 +255,18 @@ public class GameAI {
     		return ret;
     		
     	case VOLTAR:
+    		estado = null;
+    		return "andar_re";
+    	
+    
+    	case FLASH:
+    		estado = null;
+    		return "andar_re";
+    	case BLOCKED:
+    		estado = null;
     		return "andar_re";
     	}
-    	
     	return "";
     }
 }
+
