@@ -224,7 +224,7 @@ public class GameAI {
     			return "virar_direita";
     		} else if(k == 2) {
     			k++;
-    			return "atirar";
+    			return "atacar";
     		} else if (k == 3) {
     			return "andar";
     		} else {
