@@ -11,7 +11,7 @@ import INF1771_GameClient.Socket.*;
 
 public class Bot implements Runnable {
 
-	private String name = "INF1771 Bot Example1";
+	private String name = "ALLAHU AKBAR";
 	private String host = "atari.icad.puc-rio.br";
 
 	HandleClient client = new HandleClient();
@@ -257,8 +257,9 @@ public class Bot implements Runnable {
 			client.sendForward();
 		else if (decision.equals("atacar"))
 			client.sendShoot();
-		else if (decision.equals("pegar_ouro"))
+		else if (decision.equals("pegar_ouro")) {
 			client.sendGetItem();
+		}
 		else if (decision.equals("pegar_anel"))
 			client.sendGetItem();
 		else if (decision.equals("pegar_powerup"))
@@ -310,3 +311,4 @@ public class Bot implements Runnable {
 		}
 	}
 }
+
