@@ -135,7 +135,7 @@ public class GameAI {
             		this.estado = Estado.VOLTAR;
             	}
             } else if(s.equals("flash")){
-            	this.estado = Estado.FLASH;
+            	this.estado = Estado.VOLTAR;
             } else if(s.equals("redLight")){
             	System.out.println("entrei no pegar pocao\n");
             	this.estado = Estado.PEGAR_POCAO;
@@ -250,12 +250,7 @@ public class GameAI {
     		}
     		return "atacar";
     	case HIT:
-    		if(k>9) {
-    			return "andar";
-    		}
-    		
     		estado = estadoAnterior;
-    		k++;
     		return "atacar";
     			
     	case FUGIR:
@@ -278,10 +273,7 @@ public class GameAI {
     		estado = null;
     		return "andar_re";
     	
-    
-    	case FLASH:
-    		estado = null;
-    		return "andar_re";
+ 
     	case BLOCKED:
     		estado = null;
     		blocked++;
