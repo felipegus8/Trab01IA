@@ -11,7 +11,7 @@ import INF1771_GameClient.Socket.*;
 
 public class Bot implements Runnable {
 
-	private String name = "ALLAHU AKBAR";
+	private String name = "Chirrut Imwe ";
 	private String host = "atari.icad.puc-rio.br";
 
 	HandleClient client = new HandleClient();
@@ -28,7 +28,7 @@ public class Bot implements Runnable {
 
 	List<String> msg = new ArrayList<String>();
 	double msgSeconds = 0;
-	int timer_interval = 1000;
+	int timer_interval = 390;
 
 	public Bot() {
 		// Set command listener to process commands received from server
@@ -258,6 +258,7 @@ public class Bot implements Runnable {
 		else if (decision.equals("atacar"))
 			client.sendShoot();
 		else if (decision.equals("pegar_ouro")) {
+			sendMsg("I am one with the force");
 			client.sendGetItem();
 		}
 		else if (decision.equals("pegar_anel"))
