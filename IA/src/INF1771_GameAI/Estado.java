@@ -8,7 +8,6 @@ public enum Estado {
 	HIT,
 	FUGIR,
 	VOLTAR,
-	FLASH,
 	BLOCKED,
 	CAMPERMALDITO
 }
